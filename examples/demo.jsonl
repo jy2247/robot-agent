@@ -1,0 +1,15 @@
+{"episode_id": "demo-001", "frame_id": "frame-000", "timestamp_s": 0.0, "images": [], "note": "phase=approach status=in_progress"}
+{"episode_id": "demo-001", "frame_id": "frame-001", "timestamp_s": 0.3333333333333333, "images": [], "note": "phase=approach status=completed"}
+{"episode_id": "demo-001", "frame_id": "frame-002", "timestamp_s": 0.6666666666666666, "images": [], "note": "phase=approach status=completed"}
+{"episode_id": "demo-001", "frame_id": "frame-003", "timestamp_s": 1.0, "images": [], "note": "phase=grasp status=in_progress"}
+{"episode_id": "demo-001", "frame_id": "frame-004", "timestamp_s": 1.3333333333333333, "images": [], "note": "phase=grasp status=completed"}
+{"episode_id": "demo-001", "frame_id": "frame-005", "timestamp_s": 1.6666666666666667, "images": [], "note": "phase=grasp status=completed"}
+{"episode_id": "demo-001", "frame_id": "frame-006", "timestamp_s": 2.0, "images": [], "note": "phase=transport status=in_progress"}
+{"episode_id": "demo-001", "frame_id": "frame-007", "timestamp_s": 2.3333333333333335, "images": [], "note": "phase=transport status=completed"}
+{"episode_id": "demo-001", "frame_id": "frame-008", "timestamp_s": 2.6666666666666665, "images": [], "note": "phase=transport status=completed"}
+{"episode_id": "demo-001", "frame_id": "frame-009", "timestamp_s": 3.0, "images": [], "note": "phase=place status=in_progress"}
+{"episode_id": "demo-001", "frame_id": "frame-010", "timestamp_s": 3.3333333333333335, "images": [], "note": "phase=place status=completed"}
+{"episode_id": "demo-001", "frame_id": "frame-011", "timestamp_s": 3.6666666666666665, "images": [], "note": "phase=place status=completed"}
+{"episode_id": "demo-001", "frame_id": "frame-012", "timestamp_s": 4.0, "images": [], "note": "phase=release_retract status=in_progress"}
+{"episode_id": "demo-001", "frame_id": "frame-013", "timestamp_s": 4.333333333333333, "images": [], "note": "phase=release_retract status=completed"}
+{"episode_id": "demo-001", "frame_id": "frame-014", "timestamp_s": 4.666666666666667, "images": [], "note": "phase=release_retract status=completed"}

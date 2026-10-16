@@ -1,0 +1,18 @@
+[agent]
+backend = "mock"
+history_size = 4
+target_hz = 3.0
+completion_confirmations = 2
+confidence_threshold = 0.8
+
+[model]
+base_url = "http://127.0.0.1:8000/v1"
+name = "replace-with-actual-served-model-name"
+timeout_s = 30.0
+max_tokens = 300
+
+[task]
+id = "pick_place_demo"
+instruction = "Pick up the cup, place it on the tray, release it and retract."
+phases = ["approach", "grasp", "transport", "place", "release_retract"]
+criteria = ["Gripper reaches the cup", "Cup is securely held and lifted", "Cup moves above tray", "Cup rests stably on tray", "Gripper opens and retracts; cup remains stable"]
