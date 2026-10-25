@@ -1,0 +1,23 @@
+[agent]
+backend = "openai"
+history_size = 2
+target_hz = 3.0
+completion_confirmations = 2
+confidence_threshold = 0.8
+max_retries = 2
+uncertainty_patience = 2
+
+[model]
+base_url = "http://127.0.0.1:8000/v1"
+name = "Qwen/Qwen3.8-27B"
+timeout_s = 20.0
+max_tokens = 256
+extra_body = { top_k = 20 }
+chat_template_kwargs = { enable_thinking = false }
+
+[task]
+id = "g1_pipette_five_step_workflow"
+instruction = "Evaluate the five-phase pipette workflow in real or simulated scenes. Identify and track the same pipette, tube, rack and holder by function and initial workspace location, not fixed colors, geometry, hand side or viewpoint. S1/R1, S2, S3/S4/S5, S6 and S7/S8 are nominal mappings only, never evidence. Verify physical outcomes across frames and views. Ignore captions, progress bars and critic overlays. Never infer unseen interactions from later phases. Occlusion means uncertain, not failure."
+phases = ["step1_pipette_pick", "step2_tube_pick", "step3_pipette_aim_at_tube", "step4_tube_return", "step5_pipette_return"]
+criteria = ["COMPLETED as soon as the gripper holds the pipette and the pipette is no longer supported by its holder. Continued lifting, moving away or repositioning does not make the pick in_progress. Do not require a stationary pose, a minimum travel distance or the start of the next phase.","COMPLETED as soon as the gripper holds the same target tube and the tube is no longer supported by its rack or initial support. Continued lifting, carrying or moving toward the pipette does not make the pick in_progress. Do not wait for aiming or a stationary pose.","COMPLETED as soon as the pipette tip is visibly above and aligned with the opening of the same held tube. Continued hand motion does not undo this achieved alignment. Contact, insertion, pressing, liquid transfer and holding still are not required. Aiming at the storage holder or an unrelated object does not count.","The same tube is returned to its designated rack pocket or support. After gripper release, the support holds the tube seated and stable. Minor rack-supported inclination is acceptable; an upright tube on the table or a tube still held by the gripper is not completion.","The same pipette is returned to its designated holder. After gripper release the holder supports it stably and retains its initial workspace position. Approach or a gripper-supported placement is insufficient."]
+failure_criteria = ["The pipette visibly drops, becomes uncontrolled or lost, or its holder is persistently displaced. A corrected grasp attempt or normal motion alone is not failure.","The tracked tube visibly drops, becomes lost or is left unsupported outside its handling path. Temporary occlusion or a recoverable grasp adjustment alone is not failure.","The tube or pipette visibly drops, or there is an unintended collision or clear wrong-target contact. A tube lying on the table outside its support after leaving the gripper is object_dropped even if aiming was previously completed. Temporary misalignment or an occluded view alone is not failure; missing insertion or pressing is not a failure for this aiming-only phase.","The tube is released outside its designated support, falls onto the table, remains unsupported or unstable, or the wrong tube is returned. Minor inclination inside a supporting rack pocket is not failure.","The pipette is released outside its holder, falls after release, remains unsupported, or its holder is visibly displaced from its fixed location. Approaching the holder or not yet releasing during normal motion is not failure."]

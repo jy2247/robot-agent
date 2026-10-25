@@ -54,7 +54,8 @@ class HTTPTests(unittest.TestCase):
                 self.end_headers()
                 self.wfile.write(body)
         url = self.start(HTTPServer(('127.0.0.1', 0), FakeModel))
-        config = replace(CONFIG, base_url=url + '/v1', model='test-vlm', backend='openai')
+        config = replace(CONFIG, base_url=url + '/v1', model='test-vlm', backend='openai',
+                         chat_template_kwargs={'enable_thinking': False})
         obs = {'episode_id': 'one', 'frame_id': 'f1', 'timestamp_s': 1,
                'images': ['data:image/png;base64,aGVsbG8=']}
         result = ObserverAgent(config, OpenAIBackend(config)).observe(obs)
@@ -62,6 +63,7 @@ class HTTPTests(unittest.TestCase):
         path, body = captured[0]
         self.assertEqual(path, '/v1/chat/completions')
         self.assertEqual(body['model'], 'test-vlm')
+        self.assertEqual(body['chat_template_kwargs'], {'enable_thinking': False})
         self.assertEqual(body['messages'][1]['content'][1]['image_url']['url'], obs['images'][0])
 
 

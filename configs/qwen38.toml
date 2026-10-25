@@ -1,0 +1,24 @@
+[agent]
+backend = "openai"
+history_size = 4
+target_hz = 3.0
+completion_confirmations = 2
+confidence_threshold = 0.8
+
+[model]
+base_url = "http://127.0.0.1:8000/v1"
+name = "Qwen/Qwen3.8-27B"
+timeout_s = 30.0
+max_tokens = 512
+
+[model.chat_template_kwargs]
+enable_thinking = false
+
+[model.extra_body]
+top_k = 20
+
+[task]
+id = "pick_place_demo"
+instruction = "Pick up the cup, place it on the tray, release it and retract."
+phases = ["approach", "grasp", "transport", "place", "release_retract"]
+criteria = ["Gripper reaches the cup", "Cup is securely held and lifted", "Cup moves above tray", "Cup rests stably on tray", "Gripper opens and retracts; cup remains stable"]

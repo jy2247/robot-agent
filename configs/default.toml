@@ -4,6 +4,7 @@ history_size = 4
 target_hz = 3.0
 completion_confirmations = 2
 confidence_threshold = 0.8
+uncertainty_patience = 2
 
 [model]
 base_url = "http://127.0.0.1:8000/v1"

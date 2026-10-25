@@ -12,3 +12,8 @@ checkpoints/
 *.pt
 *.pth
 *.mp4
+
+.venv-model/
+.venv-data/
+.tmp/
+.cache/

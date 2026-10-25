@@ -15,6 +15,9 @@ class OpenAIBackend:
         c = self.config
         payload = {'model': c.model, 'messages': messages, 'temperature': 0,
                    'max_tokens': c.max_tokens, 'stream': False}
+        payload.update(c.model_extra_body)
+        if c.chat_template_kwargs:
+            payload['chat_template_kwargs'] = c.chat_template_kwargs
         headers = {'Content-Type': 'application/json'}
         key = os.getenv('ROBOT_VLM_API_KEY')
         if key:
@@ -23,4 +26,10 @@ class OpenAIBackend:
                       data=json.dumps(payload).encode(), headers=headers, method='POST')
         with urlopen(req, timeout=c.timeout_s) as response:
             result = json.load(response)
-        return result['choices'][0]['message']['content']
+        choice = result['choices'][0]
+        if choice.get('finish_reason') == 'length':
+            raise ValueError('model output truncated')
+        content = choice['message']['content']
+        if not isinstance(content, str) or not content.strip():
+            raise ValueError('model returned no content')
+        return content
