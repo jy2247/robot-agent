@@ -2,27 +2,18 @@ import json
 import math
 
 
-ERROR_CODES = frozenset({
-    'missed_grasp', 'misaligned', 'short_of_target', 'off_target_press', 'stalled',
-    'object_dropped', 'object_tipped', 'fixture_displaced', 'wrong_place', 'unexpected_state',
-    'unsafe_motion', 'object_lost', 'hardware_fault', 'unrecoverable',
-})
+WIRE_STATUSES = frozenset({'in_progress', 'success', 'fail'})
 
 
-def observation(value: dict) -> dict:
+def observation(value: dict, expected_images: int | None = None) -> dict:
     if not isinstance(value, dict):
         raise ValueError('observation must be an object')
-    for key in ('episode_id', 'frame_id'):
+    for key in ('episode_id', 'frame_id', 'expected_phase'):
         if not isinstance(value.get(key), str) or not value[key]:
-            raise ValueError(f'{key} must be a nonempty string')
-    ts = value.get('timestamp_s')
-    if type(ts) not in (int, float) or not math.isfinite(ts) or ts < 0:
+            raise ValueError(f'{key} must be nonempty text')
+    timestamp = value.get('timestamp_s')
+    if type(timestamp) not in (int, float) or not math.isfinite(timestamp) or timestamp < 0:
         raise ValueError('timestamp_s must be finite and nonnegative')
-    if not isinstance(value.get('note', ''), str):
-        raise ValueError('note must be text')
-    if 'expected_phase' in value and (not isinstance(value['expected_phase'], str)
-                                      or not value['expected_phase']):
-        raise ValueError('expected_phase must be nonempty text')
     if 'end_of_episode' in value and type(value['end_of_episode']) is not bool:
         raise ValueError('end_of_episode must be boolean')
     if 'is_terminal' in value and type(value['is_terminal']) is not bool:
@@ -30,41 +21,41 @@ def observation(value: dict) -> dict:
     if ('is_terminal' in value and 'end_of_episode' in value
             and value['is_terminal'] != value['end_of_episode']):
         raise ValueError('terminal flags must agree')
-    if 'is_terminal' in value:
-        value = {**value, 'end_of_episode': value['is_terminal']}
+    terminal = value.get('is_terminal', value.get('end_of_episode', False))
     images = value.get('images', [])
-    if not isinstance(images, list) or len(images) > 4:
-        raise ValueError('images must be a list of at most four image data URLs')
-    if any(not isinstance(x, str) or not x.startswith(('data:image/jpeg;base64,', 'data:image/png;base64,')) for x in images):
-        raise ValueError('images must be PNG/JPEG base64 data URLs')
-    return {k: value[k] for k in ('episode_id', 'frame_id', 'timestamp_s', 'expected_phase',
-                                   'end_of_episode', 'note', 'images') if k in value}
+    if not isinstance(images, list) or (expected_images is not None and len(images) != expected_images):
+        raise ValueError(f'images must contain exactly {expected_images} frames')
+    if any(not isinstance(item, str) or not item.startswith(
+            ('data:image/jpeg;base64,', 'data:image/png;base64,')) for item in images):
+        raise ValueError('images must be PNG/JPEG data URLs')
+    return {
+        'episode_id': value['episode_id'],
+        'frame_id': value['frame_id'],
+        'timestamp_s': timestamp,
+        'expected_phase': value['expected_phase'],
+        'end_of_episode': terminal,
+        'images': images,
+        **({'note': value['note']} if isinstance(value.get('note'), str) else {}),
+    }
 
 
-def verdict(raw: str, phases: tuple[str, ...]) -> dict:
-    raw = raw.strip()
-    if raw.startswith('```') and raw.endswith('```'):
-        raw = raw.split('\n', 1)[1].rsplit('```', 1)[0].strip()
-    d = json.loads(raw)
-    required = {'phase', 'status', 'confidence', 'errors', 'evidence'}
-    if not isinstance(d, dict) or set(d) != required:
-        raise ValueError('verdict must contain exactly phase/status/confidence/errors/evidence')
-    if d['phase'] not in (*phases, 'unknown'):
-        raise ValueError('invalid phase')
-    if d['status'] not in ('in_progress', 'completed', 'failed', 'uncertain'):
-        raise ValueError('invalid status')
-    c = d['confidence']
-    if type(c) not in (int, float) or not math.isfinite(c) or not 0 <= c <= 1:
-        raise ValueError('invalid confidence')
-    for key in ('errors', 'evidence'):
-        if not isinstance(d[key], list) or not all(isinstance(x, str) for x in d[key]):
-            raise ValueError(f'{key} must be a list of strings')
-    if any(code not in ERROR_CODES for code in d['errors']):
-        raise ValueError('invalid error code')
-    if (d['status'] == 'failed') != bool(d['errors']):
-        raise ValueError('failed status requires errors and other statuses forbid them')
-    if d['status'] == 'completed' and (d['phase'] == 'unknown' or d['errors'] or not d['evidence']):
-        raise ValueError('completion requires a known phase, evidence and no errors')
-    if d['status'] == 'failed' and not d['evidence']:
-        raise ValueError('failure requires evidence')
-    return d
+def monitor_verdict(raw: str) -> dict:
+    """Parse the first valid two-field monitor JSON object from model output."""
+    decoder = json.JSONDecoder()
+    for index, character in enumerate(raw):
+        if character != '{':
+            continue
+        try:
+            value, _ = decoder.raw_decode(raw[index:])
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(value, dict) or set(value) != {'status', 'confidence'}:
+            continue
+        status, confidence = value['status'], value['confidence']
+        if status not in WIRE_STATUSES:
+            raise ValueError('invalid monitor status')
+        if (type(confidence) not in (int, float) or not math.isfinite(confidence)
+                or not 0 <= confidence <= 1):
+            raise ValueError('invalid confidence')
+        return {'status': status, 'confidence': float(confidence)}
+    raise ValueError('model output contains no valid monitor verdict')

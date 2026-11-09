@@ -2,62 +2,92 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import math
 import os
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python 3.10 model-serving environments
+    import tomli as tomllib
 
 
 @dataclass(frozen=True)
 class Config:
     backend: str
-    history_size: int
-    target_hz: float
-    completion_confirmations: int
+    assessment_hz: float
+    terminal_confirmations: int
     confidence_threshold: float
     base_url: str
     model: str
     timeout_s: float
     max_tokens: int
+    temperature: float
+    top_p: float
     task_id: str
-    instruction: str
     phases: tuple[str, ...]
     criteria: tuple[str, ...]
+    failure_criteria: tuple[str, ...]
+    frames_per_camera: int
+    camera_count: int
+    frame_interval_s: float
+    image_width: int
+    image_height: int
     chat_template_kwargs: dict = field(default_factory=dict)
-    model_extra_body: dict = field(default_factory=dict)
-    failure_criteria: tuple[str, ...] = ()
-    max_retries: int = 2
-    uncertainty_patience: int = 2
+
+    @property
+    def image_count(self) -> int:
+        return self.frames_per_camera * self.camera_count
 
 
 def load_config(path: str) -> Config:
-    d = tomllib.loads(Path(path).read_text())
-    a, m, t = d['agent'], d['model'], d['task']
-    c = Config(**a, base_url=os.getenv('ROBOT_VLM_BASE_URL', m['base_url']),
-               model=os.getenv('ROBOT_VLM_MODEL', m['name']),
-               timeout_s=m['timeout_s'], max_tokens=m['max_tokens'],
-               task_id=t['id'], instruction=t['instruction'],
-               phases=tuple(t['phases']), criteria=tuple(t['criteria']),
-               failure_criteria=tuple(t.get('failure_criteria', ())),
-               chat_template_kwargs=m.get('chat_template_kwargs', {}),
-               model_extra_body=m.get('extra_body', {}))
-    if not isinstance(c.chat_template_kwargs, dict) or not isinstance(c.model_extra_body, dict):
-        raise ValueError('model request options must be tables')
-    if c.backend not in {'mock', 'openai'}:
+    raw = tomllib.loads(Path(path).read_text())
+    agent, model, task, sampling = (
+        raw['agent'], raw['model'], raw['task'], raw['sampling'])
+    config = Config(
+        backend=agent['backend'],
+        assessment_hz=agent['assessment_hz'],
+        terminal_confirmations=agent['terminal_confirmations'],
+        confidence_threshold=agent['confidence_threshold'],
+        base_url=os.getenv('ROBOT_VLM_BASE_URL', model['base_url']),
+        model=os.getenv('ROBOT_VLM_MODEL', model['name']),
+        timeout_s=model['timeout_s'],
+        max_tokens=model['max_tokens'],
+        temperature=model['temperature'],
+        top_p=model['top_p'],
+        chat_template_kwargs=model.get('chat_template_kwargs', {}),
+        task_id=task['id'],
+        phases=tuple(task['phases']),
+        criteria=tuple(task['criteria']),
+        failure_criteria=tuple(task['failure_criteria']),
+        frames_per_camera=sampling['frames_per_camera'],
+        camera_count=sampling['camera_count'],
+        frame_interval_s=sampling['frame_interval_s'],
+        image_width=sampling['image_width'],
+        image_height=sampling['image_height'],
+    )
+    if config.backend not in {'mock', 'openai'}:
         raise ValueError('backend must be mock or openai')
-    for v in (c.history_size, c.completion_confirmations, c.max_tokens):
-        if type(v) is not int or v < 1:
-            raise ValueError('counts must be positive integers')
-    for value in (c.max_retries, c.uncertainty_patience):
-        if type(value) is not int or value < 0:
-            raise ValueError('retry and uncertainty limits must be nonnegative integers')
-    for v in (c.target_hz, c.timeout_s):
-        if not math.isfinite(v) or v <= 0:
+    for value in (config.terminal_confirmations, config.max_tokens,
+                  config.frames_per_camera, config.camera_count,
+                  config.image_width, config.image_height):
+        if type(value) is not int or value < 1:
+            raise ValueError('counts and image dimensions must be positive integers')
+    for value in (config.assessment_hz, config.timeout_s, config.frame_interval_s):
+        if type(value) not in (int, float) or not math.isfinite(value) or value <= 0:
             raise ValueError('rates and timeouts must be finite and positive')
-    if not 0 <= c.confidence_threshold <= 1:
+    if (type(config.temperature) not in (int, float) or config.temperature < 0
+            or type(config.top_p) not in (int, float) or not 0 < config.top_p <= 1):
+        raise ValueError('invalid sampling parameters')
+    if not 0 <= config.confidence_threshold <= 1:
         raise ValueError('confidence_threshold must be between zero and one')
-    if (not c.phases or len(set(c.phases)) != len(c.phases)
-            or len(c.phases) != len(c.criteria)
-            or not all(isinstance(p, str) and p for p in (*c.phases, *c.criteria))):
-        raise ValueError('each unique phase requires a nonempty completion criterion')
-    if c.failure_criteria and (len(c.failure_criteria) != len(c.phases)
-                               or not all(isinstance(x, str) and x for x in c.failure_criteria)):
-        raise ValueError('failure_criteria must be empty or match phases')
-    return c
+    if (not config.phases or len(set(config.phases)) != len(config.phases)
+            or not (len(config.phases) == len(config.criteria)
+                    == len(config.failure_criteria))):
+        raise ValueError('each unique phase needs success and failure criteria')
+    if not all(isinstance(value, str) and value for value in (
+            *config.phases, *config.criteria, *config.failure_criteria)):
+        raise ValueError('phase definitions must be nonempty strings')
+    if not isinstance(config.chat_template_kwargs, dict):
+        raise ValueError('chat_template_kwargs must be a table')
+    if config.max_tokens > 64:
+        raise ValueError('fast monitor max_tokens must not exceed 64')
+    if config.image_count > 24:
+        raise ValueError('at most 24 images are supported per assessment')
+    return config

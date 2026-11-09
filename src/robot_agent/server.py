@@ -23,8 +23,8 @@ def make_server(agent, host='127.0.0.1', port=8080):
                 return self.send_json(404, {'error': 'not_found'})
             try:
                 size = int(self.headers.get('Content-Length', '0'))
-                if not 0 < size <= 8 * 1024 * 1024:
-                    raise ValueError('body size must be between 1 byte and 8 MiB')
+                if not 0 < size <= 32 * 1024 * 1024:
+                    raise ValueError('body size must be between 1 byte and 32 MiB')
                 data = json.loads(self.rfile.read(size))
                 if self.path == '/reset':
                     if data != {}:

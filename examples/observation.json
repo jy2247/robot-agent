@@ -1,1 +1,21 @@
-{"episode_id":"demo-001","frame_id":"frame-001","timestamp_s":0.0,"images":[],"note":"phase=approach status=in_progress"}
+{
+  "episode_id": "episode-001",
+  "frame_id": "window-001",
+  "timestamp_s": 1.75,
+  "expected_phase": "step1_pipette_pick",
+  "end_of_episode": false,
+  "images": [
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA==",
+    "data:image/jpeg;base64,eA==", "data:image/jpeg;base64,eA=="
+  ]
+}

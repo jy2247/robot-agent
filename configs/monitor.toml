@@ -1,0 +1,41 @@
+[agent]
+backend = "openai"
+assessment_hz = 1.0
+# One deterministic vote is cheap; require the same terminal result on two new windows.
+terminal_confirmations = 2
+confidence_threshold = 0.70
+
+[model]
+base_url = "http://127.0.0.1:8000/v1"
+name = "Qwen/Qwen3.8-27B"
+timeout_s = 8.0
+max_tokens = 32
+temperature = 0.0
+top_p = 1.0
+chat_template_kwargs = { enable_thinking = false }
+
+[sampling]
+# Camera-major: 8 chronological frames from each of 3 cameras, spanning 1.75 s.
+camera_count = 3
+frames_per_camera = 8
+frame_interval_s = 0.25
+image_width = 448
+image_height = 256
+
+[task]
+id = "pipette_five_phase_monitor"
+phases = ["step1_pipette_pick", "step2_tube_pick", "step3_pipette_aim_at_tube", "step4_tube_return", "step5_pipette_return"]
+criteria = [
+  "The gripper holds the pipette and the pipette is no longer supported by its holder. Motion after lift-off is still success; do not require a stationary pose or minimum travel.",
+  "The gripper holds the same target tube and the tube is no longer supported by its rack or initial support. Carrying motion is still success.",
+  "The pipette tip is visibly above and aligned with the opening of the same held tube. Contact, insertion, pressing, liquid transfer, and a stationary pose are not required.",
+  "After gripper release, the designated rack pocket supports the same tube stably. Minor rack-supported inclination is acceptable.",
+  "After gripper release, the designated holder supports the same pipette stably and remains at its initial workspace location.",
+]
+failure_criteria = [
+  "Fail only if the pipette visibly drops, becomes uncontrolled or lost, or the holder is persistently displaced.",
+  "Fail only if the tracked tube visibly drops, becomes lost, or is left unsupported outside the handling path.",
+  "Fail only for a visible pipette/tube drop, unintended collision, or clear contact with the wrong target. Misalignment or missing insertion/pressing is not failure.",
+  "Fail if the tube is visibly released outside its designated support, falls, remains unsupported or unstable, or the wrong tube is returned.",
+  "Fail if the pipette is visibly released outside its holder, falls, remains unsupported, or displaces the holder.",
+]

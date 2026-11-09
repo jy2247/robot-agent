@@ -4,32 +4,44 @@ from urllib.request import Request, urlopen
 
 
 class OpenAIBackend:
-    """Client for a separately deployed multimodal Chat Completions server."""
+    """One-shot client for a local OpenAI-compatible multimodal server."""
 
     def __init__(self, config):
         self.config = config
-        if config.model == 'replace-with-actual-served-model-name':
-            raise ValueError('Set ROBOT_VLM_MODEL to the actual server model name')
+        self.last_usage = {}
+        self.last_raw = None
 
     def generate(self, messages):
-        c = self.config
-        payload = {'model': c.model, 'messages': messages, 'temperature': 0,
-                   'max_tokens': c.max_tokens, 'stream': False}
-        payload.update(c.model_extra_body)
-        if c.chat_template_kwargs:
-            payload['chat_template_kwargs'] = c.chat_template_kwargs
+        config = self.config
+        self.last_usage = {}
+        self.last_raw = None
+        payload = {
+            'model': config.model,
+            'messages': messages,
+            'temperature': config.temperature,
+            'top_p': config.top_p,
+            'max_tokens': config.max_tokens,
+            'stream': False,
+        }
+        if config.chat_template_kwargs:
+            payload['chat_template_kwargs'] = config.chat_template_kwargs
         headers = {'Content-Type': 'application/json'}
         key = os.getenv('ROBOT_VLM_API_KEY')
         if key:
             headers['Authorization'] = 'Bearer ' + key
-        req = Request(c.base_url.rstrip('/') + '/chat/completions',
-                      data=json.dumps(payload).encode(), headers=headers, method='POST')
-        with urlopen(req, timeout=c.timeout_s) as response:
-            result = json.load(response)
-        choice = result['choices'][0]
-        if choice.get('finish_reason') == 'length':
+        request = Request(
+            config.base_url.rstrip('/') + '/chat/completions',
+            data=json.dumps(payload).encode(), headers=headers, method='POST')
+        with urlopen(request, timeout=config.timeout_s) as response:
+            response_body = json.load(response)
+        self.last_usage = response_body.get('usage', {})
+        choices = response_body.get('choices')
+        if not isinstance(choices, list) or len(choices) != 1:
+            raise ValueError('model must return exactly one choice')
+        if choices[0].get('finish_reason') == 'length':
             raise ValueError('model output truncated')
-        content = choice['message']['content']
+        content = choices[0].get('message', {}).get('content')
         if not isinstance(content, str) or not content.strip():
             raise ValueError('model returned no content')
+        self.last_raw = content
         return content

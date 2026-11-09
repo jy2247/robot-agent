@@ -5,9 +5,9 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "robot-observer-agent"
 version = "0.1.0"
-description = "Temporal VLM critic scaffold for Flow Conductor and VLA execution"
-requires-python = ">=3.11"
-dependencies = []
+description = "Low-latency temporal VLM monitor for Flow Conductor"
+requires-python = ">=3.10"
+dependencies = ["tomli>=2; python_version < '3.11'"]
 
 [project.scripts]
 robot-agent = "robot_agent.cli:main"
