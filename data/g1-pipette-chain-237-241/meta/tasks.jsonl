@@ -1,0 +1,15 @@
+{"task_index": 0, "task": "Pick up the pipette from the holder on the right with the right hand."}
+{"task_index": 1, "task": "A humanoid robot reaches the holder on its right, grasps the pipette with the right hand, and lifts it out of the holder."}
+{"task_index": 2, "task": "step1: reach the holder on the right. step2: grasp the pipette with the right hand. step3: lift the pipette out of the holder."}
+{"task_index": 3, "task": "Pick up the tube from the blue rack on the left with the left hand."}
+{"task_index": 4, "task": "A humanoid robot reaches the blue rack on its left, grasps the sample tube with the left hand, and lifts it out of the rack."}
+{"task_index": 5, "task": "step1: reach the blue rack on the left. step2: grasp the tube with the left hand. step3: lift the tube out of the rack."}
+{"task_index": 6, "task": "Aim the pipette held in the right hand at the tube held in the left hand."}
+{"task_index": 7, "task": "A humanoid robot holds the pipette in its right hand and a sample tube in its left hand, brings the two hands together in front of its body, and aims the pipette tip into the mouth of the tube."}
+{"task_index": 8, "task": "step1: hold the pipette in the right hand and the tube in the left hand. step2: bring the two hands together in front of the body. step3: aim the pipette tip into the mouth of the tube, then move the hands apart again."}
+{"task_index": 9, "task": "Put the tube held in the left hand back into the blue rack on the left."}
+{"task_index": 10, "task": "A humanoid robot holding a sample tube in its left hand moves it back over the blue rack on its left, lowers it into the rack, and releases it."}
+{"task_index": 11, "task": "step1: move the tube over the blue rack on the left. step2: lower the tube into the rack. step3: release the tube and withdraw the hand."}
+{"task_index": 12, "task": "Put the pipette held in the right hand back into the holder on the right."}
+{"task_index": 13, "task": "A humanoid robot holding the pipette in its right hand moves it back over the holder on its right, lowers it into the holder, and releases it."}
+{"task_index": 14, "task": "step1: move the pipette over the holder on the right. step2: lower the pipette into the holder. step3: release the pipette and withdraw the hand."}

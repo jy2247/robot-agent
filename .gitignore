@@ -6,12 +6,21 @@ build/
 dist/
 .env
 outputs/
-data/
 checkpoints/
 *.safetensors
 *.pt
 *.pth
 *.mp4
+
+# Track the prepared G1 video-input bundle while keeping other datasets ignored.
+data/*
+!data/g1-pipette-chain-237-241/
+data/g1-pipette-chain-237-241/*
+!data/g1-pipette-chain-237-241/meta/
+!data/g1-pipette-chain-237-241/meta/**
+!data/g1-pipette-chain-237-241/videos/
+!data/g1-pipette-chain-237-241/videos/**
+data/**/.cache/
 
 .venv-model/
 .venv-data/
