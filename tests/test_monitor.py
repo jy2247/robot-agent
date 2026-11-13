@@ -32,6 +32,14 @@ def wire(status='in_progress', confidence=.9):
 
 
 class MonitorTests(unittest.TestCase):
+    def test_five_vote_acceptance(self):
+        for count, immediate in ((3, False), (4, True), (5, True)):
+            backend = SequenceBackend([wire('success', .4), wire('success', .4)])
+            backend.last_vote_count = count
+            agent = MonitorAgent(replace(self.config, votes=5), backend)
+            self.assertEqual(agent.observe(self.payload())['terminal_accepted'], immediate)
+            self.assertTrue(agent.observe(self.payload())['terminal_accepted'])
+
     def setUp(self):
         self.config = load_config(str(ROOT / 'configs/monitor.toml'))
         self.images = ['data:image/jpeg;base64,eA=='] * self.config.image_count

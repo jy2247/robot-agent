@@ -13,12 +13,16 @@ test -s "$model_path/hf_quant_config.json"
 "$model_env/bin/python" scripts/check_nvfp4_runtime.py "$model_path"
 
 mkdir -p "$cache_root/huggingface" "$cache_root/triton" "$cache_root/torch" \
-  "$cache_root/cuda" "$cache_root/flashinfer"
+  "$cache_root/cuda" "$cache_root/flashinfer" "$cache_root/vllm"
+# Keep first-run compilation and FlashInfer JIT artifacts out of $HOME.  This
+# matters on shared machines where the root filesystem is often space-limited.
+export PATH="$model_env/bin:$PATH"
 export HF_HOME="$cache_root/huggingface"
 export TRITON_CACHE_DIR="$cache_root/triton"
 export TORCHINDUCTOR_CACHE_DIR="$cache_root/torch"
 export CUDA_CACHE_PATH="$cache_root/cuda"
 export FLASHINFER_WORKSPACE_BASE="$cache_root/flashinfer"
+export VLLM_CACHE_ROOT="$cache_root/vllm"
 export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 
 exec "$model_env/bin/vllm" serve "$model_path" \

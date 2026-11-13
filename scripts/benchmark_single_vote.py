@@ -92,6 +92,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', default='configs/monitor.toml')
     parser.add_argument('--backend', choices=['openai', 'mock'])
+    parser.add_argument('--votes', type=int, choices=[1, 5], default=1)
     parser.add_argument('--camera', action='append', type=Path, required=True,
                         help='Repeat in camera-major order; the G1 dataset uses head then wrist_left')
     parser.add_argument('--rotate-180-camera', action='append', type=int, default=[])
@@ -105,6 +106,7 @@ def main():
     args = parser.parse_args()
 
     config = load_config(args.config)
+    config = replace(config, votes=args.votes, temperature=0.7 if args.votes == 5 else 0.0)
     if args.backend:
         config = replace(config, backend=args.backend)
     if not 1 <= len(args.camera) <= 3:
@@ -184,7 +186,9 @@ def main():
                      if isinstance(row['metrics']['cached_prompt_tokens'], int)]
     accepted_times = [row['source_time_s'] for row in valid if row['terminal_accepted']]
     summary = {
-        'measurement': 'single_vote_full_response',
+        'measurement': 'single_vote_full_response' if args.votes == 1 else 'five_vote_assessment',
+        'votes_per_assessment': args.votes,
+        'vote_error_count': sum(v['error'] is not None for row in rows for v in row.get('votes', [])),
         'measurement_valid': measurement_valid,
         'backend': config.backend,
         'model': config.model,

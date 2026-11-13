@@ -11,6 +11,7 @@ checkpoints/
 *.pt
 *.pth
 *.mp4
+!demo/critic-comparison/exports/*.mp4
 
 # Track the prepared G1 video-input bundle while keeping other datasets ignored.
 data/*

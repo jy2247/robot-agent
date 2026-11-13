@@ -1,7 +1,58 @@
 # Robot VLM Monitor
 
+## B200 NVFP4：单票与五票 benchmark
+
+测试环境：单张 NVIDIA B200（SM 10.0）、Qwen3.8-27B-NVFP4、PyTorch 2.13.0+cu130、
+vLLM 0.31.0 和 FlashInfer 0.7.0.post1。vLLM 实际选择
+`FlashInferCuteDslNvFp4LinearKernel`。数据集只有 `rgb + wrist_left` 两路相机；每次 assessment
+使用每路 8 帧、0.25 秒间隔、`448×256` JPEG，共 16 张图。视频解码和 JPEG 编码在计时前完成。
+
+| 模式 | 视频 / phase | 视频采样率 | assessments | p50 | p95 | 总推理时间 | 实测持续吞吐 | prefix cache | 票错误 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 单票 | phase 1，10.43 s | 1 Hz | 9 | 293.8 ms | 342.5 ms | 2.629 s | 3.423 Hz | 7.88% | — |
+| 五票并发 | phase 1，10.43 s | 1 Hz | 9 | 319.6 ms | 501.8 ms | 3.116 s | 2.888 Hz | 70.89% | 0/45 |
+| 五票并发 | phase 1，10.43 s | 2.5 Hz | 22 | 349.6 ms | 409.7 ms | 7.868 s | 2.796 Hz | 59.93% | 1/110 |
+| 五票并发 | 未缓存的 phase 2，9.17 s | 5 Hz | 38 | 330.0 ms | 425.6 ms | 13.116 s | **2.897 Hz** | 56.99% | 1/190 |
+
+表中的“视频采样率”决定从视频时间轴取多少个窗口；它不是模型实际完成 assessment 的速度。
+benchmark 不 sleep，`实测持续吞吐 = assessments / 总推理时间`。当前五票模式的实测容量上限约为
+**2.9 assessments/s**。建议在线先使用 **2.5 Hz**：每个周期 400 ms，而未缓存 phase 2 的
+p95 为 425.6 ms，因此单 in-flight 调度偶尔会跳过一个 tick。
+
+五票模式发送五个相同的并发请求，`temperature=0.7`，每票独立 8 秒超时且不重试。错误票弃权，
+不会降低门槛；4/5 一致的 terminal 立即接受，3/5 一致则需要下一个新窗口再次确认。相同 prompt
+通过 vLLM prefix cache 复用 prefill，所以五票延迟没有变成单票的五倍。
+
+启动五票 adapter：
+
+```bash
+PYTHONPATH=src /data/jliu3292/robot-agent-vllm/bin/python \
+  -m robot_agent --votes 5 serve --port 8081
+```
+
+运行完整视频 benchmark：
+
+```bash
+PYTHONPATH=src /data/jliu3292/robot-agent-vllm/bin/python \
+  scripts/benchmark_single_vote.py --votes 5 --assessment-hz 2.5 \
+  --camera data/g1-pipette-chain-237-241/videos/chunk-000/observation.images.rgb/episode_000237.mp4 \
+  --camera data/g1-pipette-chain-237-241/videos/chunk-000/observation.images.wrist_left/episode_000237.mp4 \
+  --rotate-180-camera 1 --phase step1_pipette_pick
+```
+
+原始 `summary.json` 和逐窗口 `predictions.jsonl` 位于：
+
+- `outputs/benchmark/b200-single-full/`
+- `outputs/benchmark/b200-five-full/`
+- `outputs/benchmark/b200-five-full-2.5hz/`
+- `outputs/benchmark/b200-five-max-phase2/`
+
+完整实验条件、限制和解释见
+[docs/b200_nvfp4_five_vote_experiment_report.md](docs/b200_nvfp4_five_vote_experiment_report.md)。当前结果是
+两相机离线 steady-state 吞吐测试，还不能替代三相机 live capture-to-verdict 和准确率测试。
+
 这是一个给 Flow Conductor（FC）使用的低延迟视觉 monitor。FC 指定当前 phase，并传入
-3 路相机最近 2 秒的窗口；Qwen3.8-27B-AWQ 只返回一次短判定：
+3 路相机最近 2 秒的窗口；Qwen3.8-27B 返回短判定：
 
 ```json
 {"status":"in_progress","confidence":0.5}
@@ -12,10 +63,11 @@
 
 ## 线上参数
 
-- 单票，不使用 5 票并发；`temperature=0`。
+- 支持确定性单票（`temperature=0`）和五票并发（`temperature=0.7`）。
 - 3 路相机 × 8 帧，间隔 0.25 秒，共 24 张 `448×256` JPEG。
 - 关闭 thinking，`max_tokens=32`，请求超时 8 秒，不重试。
-- 每秒一次 assessment，同一 terminal 结果必须在两个新窗口中连续出现才接受。
+- assessment rate 可配置；当前 B200 五票建议从 2.5 Hz 开始。单票需要两个新窗口确认；五票按
+  4/5 立即接受、3/5 下一窗口确认。
 - vLLM 开 prefix caching；system、phase rubric 和帧顺序说明位于变化图像之前。
 - backend 超时或格式错误按 `in_progress/confidence=0` 返回，并单独暴露错误类型；不能伪装成
   视觉失败。

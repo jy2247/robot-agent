@@ -48,6 +48,9 @@ class MonitorAgent:
         phase = obs['expected_phase']
         confident_terminal = (error is None and result['status'] in {'success', 'fail'}
                               and result['confidence'] >= self.config.confidence_threshold)
+        vote_count = getattr(self.backend, 'last_vote_count', 0)
+        if self.config.votes == 5:
+            confident_terminal = error is None and result['status'] in {'success', 'fail'} and vote_count >= 3
         key = (phase, result['status']) if confident_terminal else None
         if key is not None and key == self.pending_terminal:
             self.pending_count += 1
@@ -57,6 +60,8 @@ class MonitorAgent:
             self.pending_terminal, self.pending_count = None, 0
 
         accepted = bool(key and self.pending_count >= self.config.terminal_confirmations)
+        if self.config.votes == 5:
+            accepted = bool(key and (vote_count >= 4 or self.pending_count >= 2))
         decision = 'continue'
         if accepted and result['status'] == 'success':
             self.completed.add(phase)
@@ -104,6 +109,7 @@ class MonitorAgent:
             'overall_reason': overall_reason,
             'backend': self.config.backend,
             'backend_error_type': error,
+            'votes': getattr(self.backend, 'last_votes', []),
             'metrics': {
                 'agent_latency_ms': latency_ms,
                 'inference_and_parse_ms': inference_ms,

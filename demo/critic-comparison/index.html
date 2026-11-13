@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robot Safety Critic — Success vs Failure</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><i></i></span>
+        <div><strong>Robot Safety Critic</strong><span>Phase + global state monitor</span></div>
+      </div>
+      <div class="model-pill"><span></span> Qwen3.8-27B · 1 Hz</div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">LIVE EVALUATION REPLAY</p>
+        <h1>One task succeeds.<br><em>One drop gets caught.</em></h1>
+      </div>
+      <p class="lede">Synchronized multi-view evidence with phase reasoning and cross-phase object-state safety monitoring.</p>
+    </section>
+
+    <nav class="case-switcher" aria-label="Demo case">
+      <button class="case-tab active" data-case="success"><span class="tab-index">01</span><span><b>Successful tube pick</b><small>Safe handling · no stop</small></span></button>
+      <button class="case-tab" data-case="failure"><span class="tab-index">02</span><span><b>Dropped pipette</b><small>Persistent hazard · stop</small></span></button>
+    </nav>
+
+    <section class="workspace">
+      <div class="visual-column">
+        <div class="video-stage" id="videoStage"></div>
+        <div class="transport">
+          <button id="playButton" class="play-button" aria-label="Play or pause">▶</button>
+          <span id="currentTime">00:00.00</span>
+          <div class="scrub-wrap">
+            <input id="scrubber" type="range" min="0" max="1000" value="0" aria-label="Video time">
+            <div id="assessmentMarks" class="assessment-marks"></div>
+          </div>
+          <span id="duration">00:00.00</span>
+          <button id="muteButton" class="icon-button" aria-label="Mute">MUTE</button>
+        </div>
+      </div>
+
+      <aside class="telemetry">
+        <div class="verdict-card" id="verdictCard">
+          <div class="verdict-top"><span class="pulse"></span><span id="verdictLabel">WARMING UP</span></div>
+          <strong id="verdictTitle">Awaiting first window</strong>
+          <p id="verdictDetail">The critic uses 8 chronological frames per camera.</p>
+        </div>
+
+        <div class="panel phase-panel">
+          <div class="panel-heading"><span>PHASE CRITIC</span><span id="phaseConfidence">—</span></div>
+          <div class="phase-row"><span class="step-number">S2</span><div><small>EXPECTED PHASE</small><strong>Pick target tube</strong></div></div>
+          <div class="state-line"><span>Phase verdict</span><b id="phaseState">—</b></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading"><span>GLOBAL SAFETY CRITIC</span><span>OBJECT STATE</span></div>
+          <div class="object-grid">
+            <div class="object-state"><span class="object-icon">P</span><div><small>PIPETTE SUPPORT</small><strong id="pipetteState">—</strong></div></div>
+            <div class="object-state"><span class="object-icon tube">T</span><div><small>TUBE SUPPORT</small><strong id="tubeState">—</strong></div></div>
+          </div>
+          <div class="confirmation">
+            <div><span>Failure confirmation</span><b id="confirmationText">0 / 2</b></div>
+            <div class="confirmation-track"><i></i><i></i></div>
+          </div>
+        </div>
+
+        <div class="panel compact-panel">
+          <div class="metric"><span>Assessment</span><b id="assessmentIndex">—</b></div>
+          <div class="metric"><span>Combined latency</span><b id="latency">—</b></div>
+          <div class="metric"><span>Action</span><b id="action">CONTINUE</b></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="explain">
+      <div class="explain-copy">
+        <p class="eyebrow">WHAT THE SYSTEM SEES</p>
+        <h2 id="storyTitle">Safe state continuity</h2>
+        <p id="storyBody">The tube transitions from rack support to hand support while the pipette remains controlled. The safety critic observes no forbidden support state.</p>
+      </div>
+      <div id="eventStrip" class="event-strip"></div>
+    </section>
+
+    <footer>
+      <span>Demo package · deterministic replay</span>
+      <div><a id="annotatedLink" href="#">Annotated MP4</a><a id="predictionsLink" href="#">Predictions JSONL</a><a id="summaryLink" href="#">Run summary</a></div>
+    </footer>
+  </main>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

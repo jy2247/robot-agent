@@ -14,6 +14,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', default='configs/monitor.toml')
     parser.add_argument('--backend', choices=['mock', 'openai'])
+    parser.add_argument('--votes', type=int, choices=[1, 5])
     commands = parser.add_subparsers(dest='command', required=True)
     replay = commands.add_parser('replay')
     replay.add_argument('--input', default='examples/demo.jsonl')
@@ -25,6 +26,8 @@ def main():
     args = parser.parse_args()
 
     config = load_config(args.config)
+    if args.votes is not None:
+        config = replace(config, votes=args.votes, temperature=0.7 if args.votes == 5 else 0.0)
     if args.backend:
         config = replace(config, backend=args.backend)
     agent = MonitorAgent(config, create_backend(config))

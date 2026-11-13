@@ -30,6 +30,7 @@ class Config:
     image_width: int
     image_height: int
     chat_template_kwargs: dict = field(default_factory=dict)
+    votes: int = 1
 
     @property
     def image_count(self) -> int:
@@ -42,6 +43,7 @@ def load_config(path: str) -> Config:
         raw['agent'], raw['model'], raw['task'], raw['sampling'])
     config = Config(
         backend=agent['backend'],
+        votes=agent.get('votes', 1),
         assessment_hz=agent['assessment_hz'],
         terminal_confirmations=agent['terminal_confirmations'],
         confidence_threshold=agent['confidence_threshold'],
@@ -64,6 +66,8 @@ def load_config(path: str) -> Config:
     )
     if config.backend not in {'mock', 'openai'}:
         raise ValueError('backend must be mock or openai')
+    if type(config.votes) is not int or config.votes not in (1, 5):
+        raise ValueError('votes must be 1 or 5')
     for value in (config.terminal_confirmations, config.max_tokens,
                   config.frames_per_camera, config.camera_count,
                   config.image_width, config.image_height):
