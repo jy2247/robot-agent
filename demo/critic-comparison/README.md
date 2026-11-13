@@ -13,16 +13,19 @@ The generated package contains:
 The committed annotated video exports are available directly here:
 
 - [full five-phase success with confirmed transitions and recorded confidence](exports/success_critic_demo.mp4)
-- [dropped pipette failure during phase 2](exports/failure_critic_demo.mp4)
+- [phase 1 confirmation followed by a phase 2 dropped-pipette failure](exports/failure_critic_demo.mp4)
 
 The success export uses G1 chain 5 (five adjacent episode clips) and its recorded five-vote
 predictions. The timeline advances only on accepted phase completions. Its confidence is the
 recorded confidence for the current expected-phase verdict, not a probability over all five phases.
 Rebuild that export with `PYTHONPATH=src /data/jliu3292/robot-agent-vllm/bin/python scripts/build_full_phase_demo.py`.
 
-The available VEGA failure recording starts in phase 2. Its phase critic stayed `in_progress`;
-the global object-state critic detected the drop. No phase 1 VEGA recording or predictions were
-available to show a real phase 1-to-2 transition in that failure export.
+The failure export is an explicitly labeled illustrative composite. Phase 1 and its confidence
+come from G1 chain 5; phase 2 and its confidence and safety stop come from a separate VEGA run.
+The splice and source change are marked on screen. The available VEGA failure recording starts
+in phase 2, so this is not a continuous single-run phase 1-to-2 inference result. Its phase critic
+stayed `in_progress`; the global object-state critic detected the drop. Phases 3–5 are not reached.
+Rebuild with `PYTHONPATH=src /data/jliu3292/robot-agent-vllm/bin/python scripts/build_failure_phase_demo.py`.
 
 Rebuild the package after editing this template:
 
