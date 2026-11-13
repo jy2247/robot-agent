@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RESULTS = Path('/data/jliu3292/robot-agent-results/vega-phase1-first-3s')
 EXPORT = ROOT / 'demo/critic-comparison/exports/failure_critic_demo.mp4'
 FPS = 12
+HOLD_S = 5.0
 
 
 def main():
@@ -22,6 +23,8 @@ def main():
         raise RuntimeError('VEGA source video could not be opened')
     duration = min(cap.get(cv2.CAP_PROP_FRAME_COUNT) / cap.get(cv2.CAP_PROP_FPS) for cap in caps)
     source_duration = duration - 3.0
+    # The supplied clips already contain a three-second tail; extend it to five seconds.
+    duration += HOLD_S - 3.0
     times = [(row['source_time_s'], row) for row in rows]
     with tempfile.TemporaryDirectory(prefix='failure-phase-demo-') as temp:
         intermediate = Path(temp) / 'intermediate.mp4'
@@ -31,7 +34,7 @@ def main():
             t = frame_index / FPS
             frames = []
             for camera_index, cap in enumerate(caps):
-                cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
+                cap.set(cv2.CAP_PROP_POS_MSEC, min(t, source_duration + 3.0 - 1 / 30) * 1000)
                 ok, frame = cap.read()
                 if not ok:
                     raise RuntimeError(f'decode failed at {t:.2f}s camera {camera_index}')
@@ -41,7 +44,7 @@ def main():
             row = times[row_index][1] if row_index >= 0 else None
             canvas = np.full((720, 1280, 3), (8, 13, 16), np.uint8)
             put(canvas, 'VEGA PHASE-1-FIRST / GLOBAL SAFETY CRITIC', 28, 37, .68, (194, 243, 125), 2)
-            put(canvas, 'FRESH QWEN RUN | FINAL-FRAME HOLD: 3 S', 28, 62, .45, (139, 182, 242))
+            put(canvas, 'FRESH QWEN RUN | FINAL-FRAME HOLD: 5 S', 28, 62, .45, (139, 182, 242))
             put(canvas, f'{t:05.1f} / {duration:.1f} s', 1060, 44, .51)
             canvas[85:465, 28:638] = fit(frames[0], 610, 380)
             canvas[85:271, 642:1252] = fit(frames[1], 610, 186)
@@ -86,7 +89,7 @@ def main():
         EXPORT.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(['ffmpeg', '-y', '-v', 'error', '-i', str(intermediate), '-c:v', 'libx264',
                         '-preset', 'fast', '-crf', '23', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', str(EXPORT)], check=True)
-    print(f'Wrote {EXPORT}: {duration:.2f}s; three-second hold begins at {source_duration:.2f}s')
+    print(f'Wrote {EXPORT}: {duration:.2f}s; five-second hold begins at {source_duration:.2f}s')
 
 
 if __name__ == '__main__':

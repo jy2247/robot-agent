@@ -23,8 +23,8 @@ Rebuild that export with `PYTHONPATH=src /data/jliu3292/robot-agent-vllm/bin/pyt
 The failure export uses only VEGA camera footage and a fresh Qwen run that begins with phase 1.
 Qwen first returned phase-1 `success` at 13.75 s and confirmed it at 14.15 s. The monitor then
 advanced to phase 2; the global object-state critic accepted a stop at 17.35 s. Phases 3–5 were
-not reached. The original footage is 15.23 s, followed by a 3 s held final frame; inference ran
-directly on that edited 18.23 s input at 2.5 assessments/s. Raw phase and safety predictions are
+not reached. The original footage is 15.23 s, followed by a 5 s held final frame; inference ran
+on the same motion with a 3 s analysis hold at 2.5 assessments/s. Raw phase and safety predictions are
 in [failure_phase1_first_predictions.jsonl](failure_phase1_first_predictions.jsonl).
 Rebuild with `PYTHONPATH=src /data/jliu3292/robot-agent-vllm/bin/python scripts/build_failure_phase_demo.py`.
 
