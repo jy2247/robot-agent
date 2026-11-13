@@ -20,12 +20,12 @@ predictions. The timeline advances only on accepted phase completions. Its confi
 recorded confidence for the current expected-phase verdict, not a probability over all five phases.
 Rebuild that export with `PYTHONPATH=src /data/jliu3292/robot-agent-vllm/bin/python scripts/build_full_phase_demo.py`.
 
-The failure export uses only the original VEGA phase 2 camera recording. Its phase critic stayed
-`in_progress`; the global object-state critic detected the drop. Phase 1 is marked "prior / not shown"
-because this recording starts in phase 2; phases 3–5 were not reached. The original video is 15.23 s,
-followed by a 3 s held final frame. Recorded assessments from the former 10 s hold are replayed in
-order across that 3 s hold; displayed time during the hold is edited playback time, not original
-inference cadence.
+The failure export uses only VEGA camera footage and a fresh Qwen run that begins with phase 1.
+Qwen first returned phase-1 `success` at 13.75 s and confirmed it at 14.15 s. The monitor then
+advanced to phase 2; the global object-state critic accepted a stop at 17.35 s. Phases 3–5 were
+not reached. The original footage is 15.23 s, followed by a 3 s held final frame; inference ran
+directly on that edited 18.23 s input at 2.5 assessments/s. Raw phase and safety predictions are
+in [failure_phase1_first_predictions.jsonl](failure_phase1_first_predictions.jsonl).
 Rebuild with `PYTHONPATH=src /data/jliu3292/robot-agent-vllm/bin/python scripts/build_failure_phase_demo.py`.
 
 Rebuild the package after editing this template:

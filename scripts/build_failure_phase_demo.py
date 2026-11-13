@@ -1,4 +1,4 @@
-"""Render the single-source VEGA failure with a three-second final-frame hold."""
+"""Render the phase-1-first VEGA evaluation with a three-second final-frame hold."""
 import json
 from pathlib import Path
 import subprocess
@@ -10,25 +10,19 @@ import numpy as np
 from build_full_phase_demo import fit, put, PHASES
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = Path('/data/jliu3292/robot-agent-data/vega-pipette-fail-5')
-RESULTS = Path('/data/jliu3292/robot-agent-results/vega-pipette-fail-5-three-camera/case-01-composite-global-safety-phase-aligned-freeze10s')
+RESULTS = Path('/data/jliu3292/robot-agent-results/vega-phase1-first-3s')
 EXPORT = ROOT / 'demo/critic-comparison/exports/failure_critic_demo.mp4'
-STEM = 'vega_fail_01_S2_dropped_ws_bridge_v31_30k_b0828'
 FPS = 12
-HOLD_S = 3.0
 
 
 def main():
     rows = [json.loads(line) for line in (RESULTS / 'predictions.jsonl').read_text().splitlines() if line.strip()]
-    caps = [cv2.VideoCapture(str(SOURCE / f'{STEM}_{name}.mp4')) for name in ('ego', 'left_wrist', 'right_wrist')]
+    caps = [cv2.VideoCapture(str(RESULTS / 'videos' / f'{name}.mp4')) for name in ('ego', 'left_wrist', 'right_wrist')]
     if not all(cap.isOpened() for cap in caps):
         raise RuntimeError('VEGA source video could not be opened')
-    source_duration = min(cap.get(cv2.CAP_PROP_FRAME_COUNT) / cap.get(cv2.CAP_PROP_FPS) for cap in caps)
-    duration = source_duration + HOLD_S
-    # Original inference sampled a ten-second frozen tail. Its identical-frame assessments
-    # are replayed across the shorter hold, preserving verdict order and confidence values.
-    times = [(min(row['source_time_s'], source_duration) +
-              max(0, row['source_time_s'] - source_duration) * HOLD_S / 10, row) for row in rows]
+    duration = min(cap.get(cv2.CAP_PROP_FRAME_COUNT) / cap.get(cv2.CAP_PROP_FPS) for cap in caps)
+    source_duration = duration - 3.0
+    times = [(row['source_time_s'], row) for row in rows]
     with tempfile.TemporaryDirectory(prefix='failure-phase-demo-') as temp:
         intermediate = Path(temp) / 'intermediate.mp4'
         writer = cv2.VideoWriter(str(intermediate), cv2.VideoWriter_fourcc(*'mp4v'), FPS, (1280, 720))
@@ -37,7 +31,7 @@ def main():
             t = frame_index / FPS
             frames = []
             for camera_index, cap in enumerate(caps):
-                cap.set(cv2.CAP_PROP_POS_MSEC, min(t, source_duration - 1 / 30) * 1000)
+                cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
                 ok, frame = cap.read()
                 if not ok:
                     raise RuntimeError(f'decode failed at {t:.2f}s camera {camera_index}')
@@ -46,15 +40,17 @@ def main():
                 row_index += 1
             row = times[row_index][1] if row_index >= 0 else None
             canvas = np.full((720, 1280, 3), (8, 13, 16), np.uint8)
-            put(canvas, 'VEGA PHASE-2 FAILURE / GLOBAL SAFETY CRITIC', 28, 37, .68, (194, 243, 125), 2)
-            put(canvas, 'SINGLE VEGA RECORDING | FINAL-FRAME HOLD: 3 S', 28, 62, .45, (139, 182, 242))
+            put(canvas, 'VEGA PHASE-1-FIRST / GLOBAL SAFETY CRITIC', 28, 37, .68, (194, 243, 125), 2)
+            put(canvas, 'FRESH QWEN RUN | FINAL-FRAME HOLD: 3 S', 28, 62, .45, (139, 182, 242))
             put(canvas, f'{t:05.1f} / {duration:.1f} s', 1060, 44, .51)
             canvas[85:465, 28:638] = fit(frames[0], 610, 380)
             canvas[85:271, 642:1252] = fit(frames[1], 610, 186)
             canvas[279:465, 642:1252] = fit(frames[2], 610, 186)
             put(canvas, 'VEGA EGO', 40, 110, .48)
             put(canvas, 'VEGA LEFT / RIGHT WRIST', 654, 110, .48)
-            put(canvas, 'EXPECTED P2: TUBE PICK', 30, 502, .65, (238, 227, 161), 2)
+            active_phase = row['phase']['phase'] if row else 'step1_pipette_pick'
+            phase_index = 1 if active_phase == 'step1_pipette_pick' else 2
+            put(canvas, f'EXPECTED P{phase_index}: {PHASES[phase_index - 1]}', 30, 502, .65, (238, 227, 161), 2)
             if row:
                 verdict = row['phase']
                 put(canvas, 'RECOGNIZED: ' + verdict['status'].replace('_', ' ').upper(), 30, 538, .57, (171, 225, 241), 2)
@@ -69,8 +65,13 @@ def main():
                 put(canvas, f'SAFETY CONFIRMATION: {row["safety"]["failure_confirmation_count"]}/2', 855, 538, .43)
             for index, label in enumerate(PHASES):
                 left = 30 + index * 250
-                state = 'PRIOR / NOT SHOWN' if index == 0 else 'STOPPED' if index == 1 and failed else 'ACTIVE' if index == 1 else 'NOT REACHED'
-                color = (95, 102, 255) if state == 'STOPPED' else (171, 225, 241) if state == 'ACTIVE' else (65, 78, 83)
+                if index == 0:
+                    state = 'CONFIRMED' if phase_index > 1 else 'ACTIVE'
+                elif index == 1:
+                    state = 'STOPPED' if failed else 'ACTIVE' if phase_index == 2 else 'PENDING'
+                else:
+                    state = 'NOT REACHED'
+                color = (95, 102, 255) if state == 'STOPPED' else (194, 243, 125) if state == 'CONFIRMED' else (171, 225, 241) if state == 'ACTIVE' else (65, 78, 83)
                 cv2.rectangle(canvas, (left, 590), (left + 238, 634), color, 2)
                 put(canvas, f'P{index + 1} {state}', left + 8, 618, .40, color)
                 put(canvas, label, left + 4, 660, .40)
