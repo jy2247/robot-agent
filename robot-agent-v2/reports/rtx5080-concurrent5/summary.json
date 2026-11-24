@@ -1,0 +1,327 @@
+{
+  "measurement": "shared_vision_dual_critics",
+  "measurement_valid": true,
+  "model": "Qwen/Qwen3-VL-8B-Instruct-FP8",
+  "revision": "9cdc6310a8cb770ce18efaf4e9935334512aee45",
+  "gpu": "NVIDIA GeForce RTX 5080",
+  "torch": "2.13.0+cu130",
+  "transformers": "5.17.0",
+  "vllm": "0.31.0",
+  "linear_backend": "b12x",
+  "kv_cache_dtype": "bfloat16",
+  "attention_backend": "auto",
+  "cuda_graphs": true,
+  "vote_execution": "concurrent",
+  "max_num_seqs": 10,
+  "prefix_caching": true,
+  "python": "3.12.3",
+  "cuda": "13.0",
+  "peak_gpu_allocated_gib": 13.000675201416016,
+  "camera_count": 2,
+  "frames_per_camera": 8,
+  "frame_interval_s": 0.25,
+  "input_image_size": [
+    448,
+    256
+  ],
+  "processor_image_size": [
+    448,
+    256
+  ],
+  "thinking": false,
+  "max_tokens_per_critic": 32,
+  "full_response_definition": "entire vote group for multi-vote; individual timings are in vote_latency and per-vote records",
+  "ttft_definition": "first vote wall time from pair submission through first delivered token, including preprocessing",
+  "timeout_enforcement": "abort between engine steps; a running GPU step cannot be preempted",
+  "timeout_s_per_critic": 8,
+  "retry_count": 0,
+  "temperature": 0.7,
+  "votes_per_critic": 5,
+  "vote_policy": "strict majority of confident terminal votes, then two consecutive windows",
+  "timeout_scope": "entire vote group",
+  "assessment_hz_requested": 1.0,
+  "assessment_count": 50,
+  "valid_count": 50,
+  "backend_error_count": 0,
+  "encoded_images": 800,
+  "vision_cache_hit_unit": "images",
+  "kv_cached_prompt_tokens": 1138512,
+  "total_prompt_tokens": 1368850,
+  "vision_calls": 50,
+  "vision_cache_hits": 7200,
+  "combined": {
+    "p50_ms": 762.2,
+    "p95_ms": 801.2,
+    "mean_ms": 762.8
+  },
+  "vision": {
+    "p50_ms": 76.7,
+    "p95_ms": 81.5,
+    "mean_ms": 76.9
+  },
+  "critics": {
+    "phase": {
+      "ttft": {
+        "p50_ms": 342.4,
+        "p95_ms": 536.7,
+        "mean_ms": 390.4
+      },
+      "full_response": {
+        "p50_ms": 733.9,
+        "p95_ms": 769.6,
+        "mean_ms": 735.5
+      }
+    },
+    "safety": {
+      "ttft": {
+        "p50_ms": 536.5,
+        "p95_ms": 573.4,
+        "mean_ms": 541.5
+      },
+      "full_response": {
+        "p50_ms": 733.9,
+        "p95_ms": 769.6,
+        "mean_ms": 735.5
+      }
+    }
+  },
+  "vote_latency": {
+    "phase": {
+      "p50_ms": 719.9,
+      "p95_ms": 761.5,
+      "mean_ms": 721.2
+    },
+    "safety": {
+      "p50_ms": 729.4,
+      "p95_ms": 766.7,
+      "mean_ms": 729.1
+    }
+  },
+  "individual_vote_errors": 0,
+  "sustained_dual_assessment_hz": 1.3105839987610497,
+  "run_wall_s": 38.15093122399412,
+  "model_load_s": 18.710905360989273,
+  "input_preparation_s": 1.4627973359893076,
+  "input_preparation_included_in_inference": false,
+  "per_window_preprocessing_included": true,
+  "prompt_mode": "grounded",
+  "safety_schema_constrained": true,
+  "phase_schedule": "recorded",
+  "controller_transitions": [],
+  "replay_stopped_on_accepted_failure": false,
+  "replay_limit": "recorded robot motion cannot wait for a late verifier; no synthetic hold frames",
+  "accepted_decisions": [
+    {
+      "phase": "step1_pipette_pick",
+      "first_success_source_s": 8.75,
+      "accepted_source_s": 9.75,
+      "confirmation_source_delay_s": 1.0,
+      "accepted_decision_compute_ms": 1511.8455970077775
+    },
+    {
+      "phase": "step2_tube_pick",
+      "first_success_source_s": null,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step3_pipette_aim_at_tube",
+      "first_success_source_s": 20.75,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step4_tube_return",
+      "first_success_source_s": null,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step5_pipette_return",
+      "first_success_source_s": 49.75,
+      "accepted_source_s": 50.75,
+      "confirmation_source_delay_s": 1.0,
+      "accepted_decision_compute_ms": 1560.266095038969
+    }
+  ],
+  "final_phase_state": {
+    "schema_version": "1.0",
+    "episode_id": "g1-chain-237-241",
+    "frame_id": "window-49",
+    "timestamp_s": 50.75,
+    "phase": "step5_pipette_return",
+    "status": "success",
+    "confidence": 0.998,
+    "terminal_confirmation_count": 2,
+    "terminal_accepted": true,
+    "completed_phases": [
+      "step1_pipette_pick",
+      "step5_pipette_return"
+    ],
+    "failed_phases": [],
+    "task_completed": false,
+    "decision": "stop",
+    "is_terminal": true,
+    "overall_status": "failed",
+    "overall_reason": "INCOMPLETE_AT_END",
+    "backend": "vllm_local",
+    "backend_error_type": null,
+    "votes": [
+      {
+        "raw": "{\"status\":\"success\",\"confidence\":1.0}",
+        "metrics": {
+          "ttft_ms": 336.2177889794111,
+          "full_response_ms": 696.6936489916407,
+          "submission_offset_ms": 3.0591050162911415,
+          "prompt_tokens": 2747,
+          "cached_prompt_tokens": 480,
+          "completion_tokens": 12,
+          "finish_reason": "stop"
+        },
+        "error": null,
+        "vote_index": 0,
+        "verdict": {
+          "status": "success",
+          "confidence": 1.0
+        }
+      },
+      {
+        "raw": "{\"status\":\"success\",\"confidence\":1.0}",
+        "metrics": {
+          "ttft_ms": 550.1849119900726,
+          "full_response_ms": 712.5543679576367,
+          "submission_offset_ms": 3.0591050162911415,
+          "prompt_tokens": 2747,
+          "cached_prompt_tokens": 2736,
+          "completion_tokens": 12,
+          "finish_reason": "stop"
+        },
+        "error": null,
+        "vote_index": 1,
+        "verdict": {
+          "status": "success",
+          "confidence": 1.0
+        }
+      },
+      {
+        "raw": "{\"status\":\"success\",\"confidence\":1.0}",
+        "metrics": {
+          "ttft_ms": 550.1852390007116,
+          "full_response_ms": 712.555332982447,
+          "submission_offset_ms": 3.0591050162911415,
+          "prompt_tokens": 2747,
+          "cached_prompt_tokens": 2736,
+          "completion_tokens": 12,
+          "finish_reason": "stop"
+        },
+        "error": null,
+        "vote_index": 2,
+        "verdict": {
+          "status": "success",
+          "confidence": 1.0
+        }
+      },
+      {
+        "raw": "{\"status\":\"success\",\"confidence\":0.99}",
+        "metrics": {
+          "ttft_ms": 550.1857830095105,
+          "full_response_ms": 726.756858988665,
+          "submission_offset_ms": 3.0591050162911415,
+          "prompt_tokens": 2747,
+          "cached_prompt_tokens": 2736,
+          "completion_tokens": 13,
+          "finish_reason": "stop"
+        },
+        "error": null,
+        "vote_index": 3,
+        "verdict": {
+          "status": "success",
+          "confidence": 0.99
+        }
+      },
+      {
+        "raw": "{\"status\":\"success\",\"confidence\":1.0}",
+        "metrics": {
+          "ttft_ms": 550.1860809745267,
+          "full_response_ms": 712.5568650080822,
+          "submission_offset_ms": 3.0591050162911415,
+          "prompt_tokens": 2747,
+          "cached_prompt_tokens": 2736,
+          "completion_tokens": 12,
+          "finish_reason": "stop"
+        },
+        "error": null,
+        "vote_index": 4,
+        "verdict": {
+          "status": "success",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "metrics": {
+      "agent_latency_ms": 759.1091700014658,
+      "inference_and_parse_ms": 729.8291850020178,
+      "over_budget": false,
+      "prompt_tokens": 13735,
+      "completion_tokens": 61,
+      "cached_prompt_tokens": 11424,
+      "state_update_latency_ms": 1.2768059968948364
+    }
+  },
+  "dataset": "https://huggingface.co/datasets/jren313/g1-pipette-2view-teleop0925-5task-eerel",
+  "transition_evaluation": [
+    {
+      "phase": "step1_pipette_pick",
+      "annotation_status": "positive_checkpoint_only",
+      "recorded_boundary_s": 10.4333333333,
+      "completion_interval_s": null,
+      "accepted_source_s": 9.75,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    },
+    {
+      "phase": "step2_tube_pick",
+      "annotation_status": "positive_checkpoint_only",
+      "recorded_boundary_s": 19.6,
+      "completion_interval_s": null,
+      "accepted_source_s": null,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    },
+    {
+      "phase": "step3_pipette_aim_at_tube",
+      "annotation_status": "positive_checkpoint_only",
+      "recorded_boundary_s": 27.35,
+      "completion_interval_s": null,
+      "accepted_source_s": null,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    },
+    {
+      "phase": "step4_tube_return",
+      "annotation_status": "release_stability_onset_needs_review",
+      "recorded_boundary_s": 35.9666666667,
+      "completion_interval_s": null,
+      "accepted_source_s": null,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    },
+    {
+      "phase": "step5_pipette_return",
+      "annotation_status": "positive_checkpoint_only",
+      "recorded_boundary_s": 51.0833333333,
+      "completion_interval_s": null,
+      "accepted_source_s": 50.75,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    }
+  ]
+}

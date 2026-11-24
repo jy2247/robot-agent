@@ -1,0 +1,16 @@
+{
+  "shared_hz": 1.2049678453177946,
+  "unshared_hz": 1.0951421391351919,
+  "throughput_improvement_percent": 10.028443090440241,
+  "phase_status_matches": 50,
+  "phase_raw_matches": 45,
+  "safety_raw_matches": 50,
+  "shared_encoded_images": 800,
+  "unshared_encoded_images": 1600,
+  "accepted_safety_stop_source_times_s": [
+    12.75,
+    27.75,
+    28.75,
+    32.75
+  ]
+}

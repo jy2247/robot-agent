@@ -1,0 +1,215 @@
+{
+  "measurement": "shared_vision_dual_critics",
+  "measurement_valid": true,
+  "model": "Qwen/Qwen3-VL-8B-Instruct-FP8",
+  "revision": "9cdc6310a8cb770ce18efaf4e9935334512aee45",
+  "gpu": "NVIDIA GeForce RTX 5080",
+  "torch": "2.13.0+cu130",
+  "transformers": "5.17.0",
+  "vllm": "0.31.0",
+  "linear_backend": "b12x",
+  "kv_cache_dtype": "bfloat16",
+  "attention_backend": "auto",
+  "cuda_graphs": false,
+  "prefix_caching": false,
+  "python": "3.12.3",
+  "cuda": "13.0",
+  "peak_gpu_allocated_gib": 13.268831729888916,
+  "camera_count": 2,
+  "frames_per_camera": 8,
+  "frame_interval_s": 0.25,
+  "input_image_size": [
+    448,
+    256
+  ],
+  "processor_image_size": [
+    448,
+    256
+  ],
+  "thinking": false,
+  "max_tokens_per_critic": 32,
+  "ttft_definition": "wall time from pair submission through first delivered token, including preprocessing",
+  "timeout_enforcement": "abort between engine steps; a running GPU step cannot be preempted",
+  "timeout_s_per_critic": 8,
+  "retry_count": 0,
+  "temperature": 0,
+  "assessment_hz_requested": 1.0,
+  "assessment_count": 50,
+  "valid_count": 50,
+  "backend_error_count": 0,
+  "encoded_images": 800,
+  "vision_cache_hit_unit": "images",
+  "vision_calls": 50,
+  "vision_cache_hits": 800,
+  "combined": {
+    "p50_ms": 930.4,
+    "p95_ms": 962.9,
+    "mean_ms": 933.1
+  },
+  "vision": {
+    "p50_ms": 74.9,
+    "p95_ms": 79.3,
+    "mean_ms": 76.1
+  },
+  "critics": {
+    "phase": {
+      "ttft": {
+        "p50_ms": 359.7,
+        "p95_ms": 601.1,
+        "mean_ms": 406.0
+      },
+      "full_response": {
+        "p50_ms": 880.7,
+        "p95_ms": 924.7,
+        "mean_ms": 886.9
+      }
+    },
+    "safety": {
+      "ttft": {
+        "p50_ms": 584.8,
+        "p95_ms": 613.0,
+        "mean_ms": 588.4
+      },
+      "full_response": {
+        "p50_ms": 910.1,
+        "p95_ms": 945.2,
+        "mean_ms": 914.7
+      }
+    }
+  },
+  "sustained_dual_assessment_hz": 1.071495846350599,
+  "run_wall_s": 46.663736654038075,
+  "model_load_s": 15.938113935000729,
+  "input_preparation_s": 1.344120791007299,
+  "input_preparation_included_in_inference": false,
+  "per_window_preprocessing_included": true,
+  "prompt_mode": "grounded",
+  "safety_schema_constrained": true,
+  "phase_schedule": "recorded",
+  "controller_transitions": [],
+  "replay_stopped_on_accepted_failure": false,
+  "replay_limit": "recorded robot motion cannot wait for a late verifier; no synthetic hold frames",
+  "accepted_decisions": [
+    {
+      "phase": "step1_pipette_pick",
+      "first_success_source_s": 8.75,
+      "accepted_source_s": 9.75,
+      "confirmation_source_delay_s": 1.0,
+      "accepted_decision_compute_ms": 1859.4902029726654
+    },
+    {
+      "phase": "step2_tube_pick",
+      "first_success_source_s": null,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step3_pipette_aim_at_tube",
+      "first_success_source_s": 20.75,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step4_tube_return",
+      "first_success_source_s": null,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step5_pipette_return",
+      "first_success_source_s": 49.75,
+      "accepted_source_s": 50.75,
+      "confirmation_source_delay_s": 1.0,
+      "accepted_decision_compute_ms": 1849.1719029843807
+    }
+  ],
+  "final_phase_state": {
+    "schema_version": "1.0",
+    "episode_id": "g1-chain-237-241",
+    "frame_id": "window-49",
+    "timestamp_s": 50.75,
+    "phase": "step5_pipette_return",
+    "status": "success",
+    "confidence": 1.0,
+    "terminal_confirmation_count": 2,
+    "terminal_accepted": true,
+    "completed_phases": [
+      "step1_pipette_pick",
+      "step5_pipette_return"
+    ],
+    "failed_phases": [],
+    "task_completed": false,
+    "decision": "stop",
+    "is_terminal": true,
+    "overall_status": "failed",
+    "overall_reason": "INCOMPLETE_AT_END",
+    "backend": "vllm_local",
+    "backend_error_type": null,
+    "votes": [],
+    "metrics": {
+      "agent_latency_ms": 918.7022509868257,
+      "inference_and_parse_ms": 845.5371829913929,
+      "over_budget": false,
+      "prompt_tokens": 2747,
+      "completion_tokens": 12,
+      "cached_prompt_tokens": null,
+      "state_update_latency_ms": 1.525519008282572
+    }
+  },
+  "dataset": "https://huggingface.co/datasets/jren313/g1-pipette-2view-teleop0925-5task-eerel",
+  "transition_evaluation": [
+    {
+      "phase": "step1_pipette_pick",
+      "annotation_status": "positive_checkpoint_only",
+      "recorded_boundary_s": 10.4333333333,
+      "completion_interval_s": null,
+      "accepted_source_s": 9.75,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    },
+    {
+      "phase": "step2_tube_pick",
+      "annotation_status": "positive_checkpoint_only",
+      "recorded_boundary_s": 19.6,
+      "completion_interval_s": null,
+      "accepted_source_s": null,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    },
+    {
+      "phase": "step3_pipette_aim_at_tube",
+      "annotation_status": "positive_checkpoint_only",
+      "recorded_boundary_s": 27.35,
+      "completion_interval_s": null,
+      "accepted_source_s": null,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    },
+    {
+      "phase": "step4_tube_return",
+      "annotation_status": "release_stability_onset_needs_review",
+      "recorded_boundary_s": 35.9666666667,
+      "completion_interval_s": null,
+      "accepted_source_s": null,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    },
+    {
+      "phase": "step5_pipette_return",
+      "annotation_status": "positive_checkpoint_only",
+      "recorded_boundary_s": 51.0833333333,
+      "completion_interval_s": null,
+      "accepted_source_s": 50.75,
+      "source_delay_interval_s": null,
+      "delivery_delay_interval_s": null,
+      "delay_basis": "hypothetical live delivery at this source timestamp; offline replay does not measure capture-to-verdict"
+    }
+  ]
+}

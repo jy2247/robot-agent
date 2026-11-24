@@ -1,0 +1,117 @@
+[
+  {
+    "phase_index": 0,
+    "episode_index": 237,
+    "start_s": 0,
+    "end_s": 10.433333333333334,
+    "provenance": {
+      "episode_index": 237,
+      "source_session": "20261007_1319",
+      "source_episode": "episode_0002_step1",
+      "source_label": "successful",
+      "source_text": {
+        "goal": "pick up the red cup",
+        "desc": "A humanoid robot picks up a red cup from the table.",
+        "steps": "step1: approach table. step2: grasp cup. step3: lift cup."
+      },
+      "source_author": "YanjieZe",
+      "frames": 626,
+      "t_img_first_ms": 1791394629873,
+      "t_img_last_ms": 1791394640340,
+      "t_state_frozen_at_ms": 1790024685405,
+      "source_dataset_episode_index": 0
+    }
+  },
+  {
+    "phase_index": 1,
+    "episode_index": 238,
+    "start_s": 10.433333333333334,
+    "end_s": 19.6,
+    "provenance": {
+      "episode_index": 238,
+      "source_session": "20261007_1319",
+      "source_episode": "episode_0002_step2",
+      "source_label": "successful",
+      "source_text": {
+        "goal": "pick up the red cup",
+        "desc": "A humanoid robot picks up a red cup from the table.",
+        "steps": "step1: approach table. step2: grasp cup. step3: lift cup."
+      },
+      "source_author": "YanjieZe",
+      "frames": 550,
+      "t_img_first_ms": 1791394640356,
+      "t_img_last_ms": 1791394649554,
+      "t_state_frozen_at_ms": 1790024685405,
+      "source_dataset_episode_index": 1
+    }
+  },
+  {
+    "phase_index": 2,
+    "episode_index": 239,
+    "start_s": 19.6,
+    "end_s": 27.35,
+    "provenance": {
+      "episode_index": 239,
+      "source_session": "20261007_1319",
+      "source_episode": "episode_0002_step3",
+      "source_label": "successful",
+      "source_text": {
+        "goal": "pick up the red cup",
+        "desc": "A humanoid robot picks up a red cup from the table.",
+        "steps": "step1: approach table. step2: grasp cup. step3: lift cup."
+      },
+      "source_author": "YanjieZe",
+      "frames": 465,
+      "t_img_first_ms": 1791394649570,
+      "t_img_last_ms": 1791394657346,
+      "t_state_frozen_at_ms": 1790024685405,
+      "source_dataset_episode_index": 2
+    }
+  },
+  {
+    "phase_index": 3,
+    "episode_index": 240,
+    "start_s": 27.35,
+    "end_s": 35.96666666666667,
+    "provenance": {
+      "episode_index": 240,
+      "source_session": "20261007_1319",
+      "source_episode": "episode_0002_step4",
+      "source_label": "successful",
+      "source_text": {
+        "goal": "pick up the red cup",
+        "desc": "A humanoid robot picks up a red cup from the table.",
+        "steps": "step1: approach table. step2: grasp cup. step3: lift cup."
+      },
+      "source_author": "YanjieZe",
+      "frames": 517,
+      "t_img_first_ms": 1791394657360,
+      "t_img_last_ms": 1791394666006,
+      "t_state_frozen_at_ms": 1790024685405,
+      "source_dataset_episode_index": 3
+    }
+  },
+  {
+    "phase_index": 4,
+    "episode_index": 241,
+    "start_s": 35.96666666666667,
+    "end_s": 51.083333333333336,
+    "provenance": {
+      "episode_index": 241,
+      "source_session": "20261007_1319",
+      "source_episode": "episode_0002_step5",
+      "source_label": "successful",
+      "source_text": {
+        "goal": "pick up the red cup",
+        "desc": "A humanoid robot picks up a red cup from the table.",
+        "steps": "step1: approach table. step2: grasp cup. step3: lift cup."
+      },
+      "source_author": "YanjieZe",
+      "frames": 907,
+      "t_img_first_ms": 1791394666022,
+      "t_img_last_ms": 1791394681199,
+      "t_state_frozen_at_ms": 1790024685405,
+      "source_dataset_episode_index": 4
+    }
+  }
+]

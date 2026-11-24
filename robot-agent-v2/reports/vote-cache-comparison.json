@@ -1,0 +1,143 @@
+{
+  "runs": [
+    {
+      "label": "1 vote",
+      "run": "rtx5080-adjusted",
+      "votes": 1,
+      "prefix_cache": false,
+      "valid": "50/50",
+      "hz": 1.071495846350599,
+      "p50_ms": 930.4,
+      "p95_ms": 962.9,
+      "accepted_phases": [
+        "step1_pipette_pick",
+        "step5_pipette_return"
+      ],
+      "safety_stop_times": [
+        11.75,
+        12.75,
+        27.75,
+        28.75,
+        31.75,
+        32.75
+      ],
+      "safety_unknown_windows": 0,
+      "cached_tokens": 0,
+      "prompt_tokens": null,
+      "individual_vote_errors": 0
+    },
+    {
+      "label": "3 votes",
+      "run": "rtx5080-vote3",
+      "votes": 3,
+      "prefix_cache": false,
+      "valid": "50/50",
+      "hz": 0.3892252367461953,
+      "p50_ms": 2552.7,
+      "p95_ms": 2649.2,
+      "accepted_phases": [
+        "step1_pipette_pick",
+        "step5_pipette_return"
+      ],
+      "safety_stop_times": [
+        11.75,
+        12.75,
+        27.75,
+        28.75,
+        31.75,
+        32.75
+      ],
+      "safety_unknown_windows": 0,
+      "cached_tokens": 0,
+      "prompt_tokens": null,
+      "individual_vote_errors": 0
+    },
+    {
+      "label": "5 votes",
+      "run": "rtx5080-vote5",
+      "votes": 5,
+      "prefix_cache": false,
+      "valid": "50/50",
+      "hz": 0.24149719510692153,
+      "p50_ms": 4120.8,
+      "p95_ms": 4242.2,
+      "accepted_phases": [
+        "step1_pipette_pick",
+        "step5_pipette_return"
+      ],
+      "safety_stop_times": [
+        11.75,
+        12.75,
+        27.75,
+        28.75,
+        31.75,
+        32.75
+      ],
+      "safety_unknown_windows": 0,
+      "cached_tokens": 0,
+      "prompt_tokens": null,
+      "individual_vote_errors": 0
+    },
+    {
+      "label": "3 votes + KV",
+      "run": "rtx5080-vote3-kv",
+      "votes": 3,
+      "prefix_cache": true,
+      "valid": "50/50",
+      "hz": 0.5824585525666275,
+      "p50_ms": 1698.6,
+      "p95_ms": 1793.0,
+      "accepted_phases": [
+        "step1_pipette_pick",
+        "step5_pipette_return"
+      ],
+      "safety_stop_times": [
+        11.75,
+        12.75,
+        27.75,
+        28.75,
+        31.75,
+        32.75
+      ],
+      "safety_unknown_windows": 0,
+      "cached_tokens": 593232,
+      "prompt_tokens": 821310,
+      "individual_vote_errors": 0
+    },
+    {
+      "label": "Contact-rule safety",
+      "run": "rtx5080-support-contact",
+      "votes": 1,
+      "prefix_cache": false,
+      "valid": "50/50",
+      "hz": 1.0470909503308299,
+      "p50_ms": 949.1,
+      "p95_ms": 979.3,
+      "accepted_phases": [
+        "step1_pipette_pick",
+        "step5_pipette_return"
+      ],
+      "safety_stop_times": [
+        11.75,
+        12.75,
+        27.75,
+        28.75,
+        31.75,
+        32.75,
+        33.75
+      ],
+      "safety_unknown_windows": 1,
+      "cached_tokens": 0,
+      "prompt_tokens": 280670,
+      "individual_vote_errors": 0
+    }
+  ],
+  "cache_output_comparison": {
+    "phase_status_matches": 50,
+    "phase_accept_matches": 50,
+    "safety_support_matches": 50,
+    "individual_raw_matches": 288,
+    "individual_raw_total": 300,
+    "windows": 50
+  }
+}

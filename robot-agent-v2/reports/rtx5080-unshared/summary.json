@@ -1,0 +1,156 @@
+{
+  "measurement": "unshared_vision_dual_critics",
+  "measurement_valid": true,
+  "model": "Qwen/Qwen3-VL-8B-Instruct-FP8",
+  "revision": "9cdc6310a8cb770ce18efaf4e9935334512aee45",
+  "gpu": "NVIDIA GeForce RTX 5080",
+  "torch": "2.13.0+cu130",
+  "transformers": "5.17.0",
+  "vllm": "0.31.0",
+  "linear_backend": "b12x",
+  "kv_cache_dtype": "bfloat16",
+  "attention_backend": "auto",
+  "cuda_graphs": false,
+  "prefix_caching": false,
+  "python": "3.12.3",
+  "cuda": "13.0",
+  "peak_gpu_allocated_gib": 12.92556381225586,
+  "camera_count": 2,
+  "frames_per_camera": 8,
+  "frame_interval_s": 0.25,
+  "input_image_size": [
+    448,
+    256
+  ],
+  "processor_image_size": [
+    448,
+    256
+  ],
+  "thinking": false,
+  "max_tokens_per_critic": 32,
+  "ttft_definition": "wall time from pair submission through first delivered token, including preprocessing",
+  "timeout_enforcement": "abort between engine steps; a running GPU step cannot be preempted",
+  "timeout_s_per_critic": 8,
+  "retry_count": 0,
+  "temperature": 0,
+  "assessment_hz_requested": 1.0,
+  "assessment_count": 50,
+  "valid_count": 50,
+  "backend_error_count": 0,
+  "encoded_images": 1600,
+  "vision_cache_hit_unit": "images",
+  "vision_calls": 100,
+  "vision_cache_hits": 0,
+  "combined": {
+    "p50_ms": 907.1,
+    "p95_ms": 958.2,
+    "mean_ms": 913.0
+  },
+  "vision": {
+    "p50_ms": 154.2,
+    "p95_ms": 162.2,
+    "mean_ms": 154.5
+  },
+  "critics": {
+    "phase": {
+      "ttft": {
+        "p50_ms": 412.5,
+        "p95_ms": 429.8,
+        "mean_ms": 414.3
+      },
+      "full_response": {
+        "p50_ms": 862.3,
+        "p95_ms": 888.6,
+        "mean_ms": 864.4
+      }
+    },
+    "safety": {
+      "ttft": {
+        "p50_ms": 569.5,
+        "p95_ms": 594.5,
+        "mean_ms": 571.8
+      },
+      "full_response": {
+        "p50_ms": 889.7,
+        "p95_ms": 936.6,
+        "mean_ms": 895.3
+      }
+    }
+  },
+  "sustained_dual_assessment_hz": 1.0951421391351919,
+  "run_wall_s": 45.65617394604487,
+  "model_load_s": 15.91560428601224,
+  "input_preparation_s": 1.3729376560077071,
+  "input_preparation_included_in_inference": false,
+  "per_window_preprocessing_included": true,
+  "phase_schedule": "recorded stage boundaries supplied by replay FC; not autonomous phase advancement",
+  "accepted_decisions": [
+    {
+      "phase": "step1_pipette_pick",
+      "first_success_source_s": null,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step2_tube_pick",
+      "first_success_source_s": null,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step3_pipette_aim_at_tube",
+      "first_success_source_s": null,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step4_tube_return",
+      "first_success_source_s": null,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    },
+    {
+      "phase": "step5_pipette_return",
+      "first_success_source_s": 49.75,
+      "accepted_source_s": null,
+      "confirmation_source_delay_s": null,
+      "accepted_decision_compute_ms": null
+    }
+  ],
+  "final_phase_state": {
+    "schema_version": "1.0",
+    "episode_id": "g1-chain-237-241",
+    "frame_id": "window-49",
+    "timestamp_s": 50.75,
+    "phase": "step5_pipette_return",
+    "status": "in_progress",
+    "confidence": 0.9,
+    "terminal_confirmation_count": 0,
+    "terminal_accepted": false,
+    "completed_phases": [],
+    "failed_phases": [],
+    "task_completed": false,
+    "decision": "stop",
+    "is_terminal": true,
+    "overall_status": "failed",
+    "overall_reason": "INCOMPLETE_AT_END",
+    "backend": "vllm_local",
+    "backend_error_type": null,
+    "votes": [],
+    "metrics": {
+      "agent_latency_ms": 904.1939199669287,
+      "inference_and_parse_ms": 862.1051430236548,
+      "over_budget": false,
+      "prompt_tokens": 2184,
+      "completion_tokens": 13,
+      "cached_prompt_tokens": null,
+      "state_update_latency_ms": 1.1474800412543118
+    }
+  },
+  "dataset": "https://huggingface.co/datasets/jren313/g1-pipette-2view-teleop0925-5task-eerel",
+  "metric_label_correction": "Legacy phase adapter timings relabeled from recorded v2_metrics; raw verdicts and measured timings unchanged."
+}

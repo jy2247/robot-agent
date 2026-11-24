@@ -1,5 +1,13 @@
 # Robot VLM Monitor
 
+## 当前 RTX 5080 部署：Robot Agent V2
+
+当前 RTX 5080 实验实现使用 `robot-agent-v2/` 的 Qwen3-VL-8B-Instruct-FP8：共享视觉编码器、phase/safety 双 critic、KV prefix cache 和多票调度。
+**2026-11-24 最新三票配置实测：1.346 assessments/s，p50 724.5 ms、p95 763.0 ms。**
+优化方法、完整对照和测量边界见 [RTX 5080 inference / throughput README](README_RTX5080.md)，部署方法见 [V2 README](robot-agent-v2/README.md)。
+这是双相机离线实测值；文档检查时本地 8082 API 未运行。阶段接受仍为 2/5，三相机吞吐尚未测量。
+下方 B200 / A5000 数据是历史环境结果，不能直接作为本机的模型、参数或 Hz。
+
 ## B200 NVFP4：单票与五票 benchmark
 
 测试环境：单张 NVIDIA B200（SM 10.0）、Qwen3.8-27B-NVFP4、PyTorch 2.13.0+cu130、

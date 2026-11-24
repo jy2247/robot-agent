@@ -1,0 +1,35 @@
+test_all_votes_enqueued_together_and_outputs_mapped_by_id (test_concurrent.ConcurrentTests.test_all_votes_enqueued_together_and_outputs_mapped_by_id) ... ok
+test_deadline_aborts_all_pending_votes (test_concurrent.ConcurrentTests.test_deadline_aborts_all_pending_votes) ... ok
+test_backend_error_never_replays_previous_votes (test_dual.DualTests.test_backend_error_never_replays_previous_votes) ... ok
+test_confirmation_errors_and_incomplete_end (test_dual.DualTests.test_confirmation_errors_and_incomplete_end) ... ok
+test_multi_vote_still_requires_new_window_confirmation (test_dual.DualTests.test_multi_vote_still_requires_new_window_confirmation) ... ok
+test_reset_required_and_duplicate_rejected (test_dual.DualTests.test_reset_required_and_duplicate_rejected) ... ok
+test_safety_overrides_success_after_two_windows (test_dual.DualTests.test_safety_overrides_success_after_two_windows) ... ok
+test_busy_is_rejected_without_observing_or_resetting (test_http_adapter.AdapterTests.test_busy_is_rejected_without_observing_or_resetting) ... 127.0.0.1 - - [24/Nov/2026 17:37:19] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 17:37:19] "POST /observe HTTP/1.1" 429 -
+127.0.0.1 - - [24/Nov/2026 17:37:19] "POST /reset HTTP/1.1" 429 -
+127.0.0.1 - - [24/Nov/2026 17:37:19] "POST /observe HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 17:37:19] "POST /reset HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 17:37:19] "POST /reset HTTP/1.1" 200 -
+ok
+test_shared_defaults_and_explicit_controls (test_options.OptionsTests.test_shared_defaults_and_explicit_controls) ... ok
+test_contact_rules_only_change_safety (test_prompting.PromptTests.test_contact_rules_only_change_safety) ... ok
+test_criteria_and_identity (test_prompting.PromptTests.test_criteria_and_identity) ... ok
+test_labels_preserve_exact_camera_major_images (test_prompting.PromptTests.test_labels_preserve_exact_camera_major_images) ... ok
+test_newest_only_is_explicit_diagnostic_selection (test_prompting.PromptTests.test_newest_only_is_explicit_diagnostic_selection) ... ok
+test_advances_only_on_accepted_success (test_replay.ReplayTests.test_advances_only_on_accepted_success) ... ok
+test_clip_boundary_is_not_ground_truth (test_replay.ReplayTests.test_clip_boundary_is_not_ground_truth) ... ok
+test_safety_prevents_advance (test_replay.ReplayTests.test_safety_prevents_advance) ... ok
+test_direct_python_jit_tool_and_linker_layout (test_runtime.RuntimeTests.test_direct_python_jit_tool_and_linker_layout) ... ok
+test_counts_actual_images_and_calls (test_shared.CounterTests.test_counts_actual_images_and_calls) ... ok
+test_aggregation_keeps_raw_votes_and_errors (test_voting.EngineVotingTests.test_aggregation_keeps_raw_votes_and_errors) ... ok
+test_confidence_is_not_increased_by_repetition (test_voting.VotingTests.test_confidence_is_not_increased_by_repetition) ... ok
+test_low_confidence_and_missing_votes_do_not_count_as_terminal_majority (test_voting.VotingTests.test_low_confidence_and_missing_votes_do_not_count_as_terminal_majority) ... ok
+test_majority_not_plurality (test_voting.VotingTests.test_majority_not_plurality) ... ok
+test_real_unsafe_majority_is_preserved (test_voting.VotingTests.test_real_unsafe_majority_is_preserved) ... ok
+test_safety_disagreement_is_unknown_not_safe (test_voting.VotingTests.test_safety_disagreement_is_unknown_not_safe) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.525s
+
+OK

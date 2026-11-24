@@ -1,0 +1,12 @@
+{
+  "comparison": "offline policy only; no inference or throughput benchmark",
+  "policy": "existing MonitorAgent 5-vote rule: >=4 confident terminal votes accepts immediately; 3/5 needs two windows",
+  "accepted": {
+    "step1_pipette_pick": 8.75,
+    "step2_tube_pick": null,
+    "step3_pipette_aim_at_tube": 20.75,
+    "step4_tube_return": null,
+    "step5_pipette_return": 49.75
+  },
+  "warning": "Changed acceptance policy, not improved visual accuracy; same chain, no independent onset labels."
+}

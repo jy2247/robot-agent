@@ -1,0 +1,86 @@
+[
+  {
+    "time": 3.75,
+    "critic": "phase",
+    "vote": 0,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.75}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.8}"
+  },
+  {
+    "time": 7.75,
+    "critic": "phase",
+    "vote": 0,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.75}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.8}"
+  },
+  {
+    "time": 8.75,
+    "critic": "phase",
+    "vote": 2,
+    "without_cache": "{\"status\":\"success\",\"confidence\":1.0}",
+    "with_cache": "{\"status\":\"success\",\"confidence\":0.99}"
+  },
+  {
+    "time": 11.75,
+    "critic": "phase",
+    "vote": 1,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.8}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.5}"
+  },
+  {
+    "time": 11.75,
+    "critic": "phase",
+    "vote": 2,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.8}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.5}"
+  },
+  {
+    "time": 13.75,
+    "critic": "phase",
+    "vote": 2,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.75}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.8}"
+  },
+  {
+    "time": 19.75,
+    "critic": "phase",
+    "vote": 1,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.7}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.5}"
+  },
+  {
+    "time": 24.75,
+    "critic": "phase",
+    "vote": 1,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.75}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.8}"
+  },
+  {
+    "time": 26.75,
+    "critic": "safety",
+    "vote": 1,
+    "without_cache": "{\"pipette_support\":\"hand\",\"tube_support\":\"rack\"}",
+    "with_cache": "{\"pipette_support\":\"hand\",\"tube_support\":\"work_surface\"}"
+  },
+  {
+    "time": 42.75,
+    "critic": "phase",
+    "vote": 1,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.75}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.5}"
+  },
+  {
+    "time": 42.75,
+    "critic": "phase",
+    "vote": 2,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.75}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.5}"
+  },
+  {
+    "time": 46.75,
+    "critic": "phase",
+    "vote": 2,
+    "without_cache": "{\"status\":\"in_progress\",\"confidence\":0.75}",
+    "with_cache": "{\"status\":\"in_progress\",\"confidence\":0.5}"
+  }
+]

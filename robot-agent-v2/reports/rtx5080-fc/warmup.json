@@ -1,0 +1,67 @@
+{
+  "source_time_s": 1.8,
+  "phase": {
+    "schema_version": "1.0",
+    "episode_id": "warmup",
+    "frame_id": "warmup",
+    "timestamp_s": 1.8,
+    "phase": "step1_pipette_pick",
+    "status": "in_progress",
+    "confidence": 0.5,
+    "terminal_confirmation_count": 0,
+    "terminal_accepted": false,
+    "completed_phases": [],
+    "failed_phases": [],
+    "task_completed": false,
+    "decision": "continue",
+    "is_terminal": false,
+    "overall_status": "in_progress",
+    "overall_reason": null,
+    "backend": "vllm_local",
+    "backend_error_type": null,
+    "votes": [],
+    "metrics": {
+      "agent_latency_ms": 1347.6459109806456,
+      "inference_and_parse_ms": 1273.2380319503136,
+      "over_budget": true,
+      "prompt_tokens": 2759,
+      "completion_tokens": 13,
+      "cached_prompt_tokens": null,
+      "state_update_latency_ms": 1.3748130295425653
+    }
+  },
+  "safety": {
+    "pipette_support": "holder",
+    "tube_support": "work_surface",
+    "status": "safe",
+    "reason": null,
+    "failure_confirmation_count": 0,
+    "failure_accepted": false,
+    "backend_error_type": null
+  },
+  "phase_raw_model_output": "{\"status\":\"in_progress\",\"confidence\":0.5}",
+  "safety_raw_model_output": "{\"pipette_support\":\"holder\",\"tube_support\":\"work_surface\"}",
+  "combined_status": "in_progress",
+  "combined_decision": "continue",
+  "v2_metrics": {
+    "vision_calls": 1,
+    "vision_cache_hits": 16,
+    "vision_ms": 83.604174957145,
+    "encoded_images": 16,
+    "phase": {
+      "ttft_ms": 827.7713409624994,
+      "full_response_ms": 1273.2380319503136,
+      "prompt_tokens": 2759,
+      "completion_tokens": 13,
+      "finish_reason": "stop"
+    },
+    "safety": {
+      "ttft_ms": 975.5102039780468,
+      "full_response_ms": 1324.2314359522425,
+      "prompt_tokens": 2703,
+      "completion_tokens": 14,
+      "finish_reason": "stop"
+    },
+    "combined_ms": 1347.6459109806456
+  }
+}

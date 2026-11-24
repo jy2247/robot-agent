@@ -1,0 +1,26 @@
+test_hot_path_sends_one_short_non_thinking_choice (test_backend.BackendTests.test_hot_path_sends_one_short_non_thinking_choice) ... ok
+test_health_observe_and_reset (test_http.HttpTests.test_health_observe_and_reset) ... 127.0.0.1 - - [24/Nov/2026 17:34:01] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 17:34:01] "POST /observe HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 17:34:01] "POST /reset HTTP/1.1" 200 -
+ok
+test_accepted_failure_revokes_completion (test_monitor.MonitorTests.test_accepted_failure_revokes_completion) ... ok
+test_backend_error_is_not_physical_failure (test_monitor.MonitorTests.test_backend_error_is_not_physical_failure) ... ok
+test_config_is_single_vote_latency_profile (test_monitor.MonitorTests.test_config_is_single_vote_latency_profile) ... ok
+test_five_vote_acceptance (test_monitor.MonitorTests.test_five_vote_acceptance) ... ok
+test_in_progress_or_phase_change_resets_terminal_streak (test_monitor.MonitorTests.test_in_progress_or_phase_change_resets_terminal_streak) ... ok
+test_input_is_strict_and_does_not_mutate_on_rejection (test_monitor.MonitorTests.test_input_is_strict_and_does_not_mutate_on_rejection) ... ok
+test_parser_tolerates_wrapper_but_enforces_two_fields (test_monitor.MonitorTests.test_parser_tolerates_wrapper_but_enforces_two_fields) ... ok
+test_prompt_has_only_active_phase_and_stable_metadata (test_monitor.MonitorTests.test_prompt_has_only_active_phase_and_stable_metadata) ... ok
+test_single_request_and_two_window_terminal_confirmation (test_monitor.MonitorTests.test_single_request_and_two_window_terminal_confirmation) ... ok
+test_terminal_requires_all_phases (test_monitor.MonitorTests.test_terminal_requires_all_phases) ... ok
+test_parser_enforces_exact_support_fields (test_safety.GlobalSafetyTests.test_parser_enforces_exact_support_fields) ... ok
+test_two_consecutive_unsafe_states_are_accepted (test_safety.GlobalSafetyTests.test_two_consecutive_unsafe_states_are_accepted) ... ok
+test_unknown_and_backend_error_abstain (test_safety.GlobalSafetyTests.test_unknown_and_backend_error_abstain) ... ok
+test_final_phase_is_not_blocked_by_duration_prior (test_sequence.SequenceDecoderTests.test_final_phase_is_not_blocked_by_duration_prior) ... ok
+test_soft_prior_blocks_early_transition_and_order_is_monotonic (test_sequence.SequenceDecoderTests.test_soft_prior_blocks_early_transition_and_order_is_monotonic) ... ok
+test_errors_abstain_without_reducing_threshold (test_votes.VoteTests.test_errors_abstain_without_reducing_threshold) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.521s
+
+OK
